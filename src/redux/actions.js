@@ -14,9 +14,8 @@ export const fetchDispatch = (limit, query) => async (dispatch) => { // thunk
     const api = new ApiService();
 
     try {
-        const response = await api.getRequest(); // все статьи получаем
+        // const response = await api.getRequest(); // все статьи получаем
         const response2 = await api.getPagination(limit, query);
-        console.log(response2)
         dispatch(getArticles(response2))
     } catch (e) {
         console.log(e)

@@ -8,21 +8,13 @@ import ApiService from "../../utilities/api-service/api-service";
 
 const PaginationArticles = () => {
     const dispatch = useDispatch()
-    const api = new ApiService();
     const totalCount = useSelector(state => state.articles.totalCount);
-    console.log(totalCount)
-    const perPage = useSelector(state => state.articles.perPage);
     const currentPage = useSelector(state => state.articles.currentPage)
 
     const updatePage = async (curr) => {
         dispatch(setCurrentPage(curr))
-        const res = await api.getPagination(5, curr) // получаем пять статей
-        // dispatch(getArticles(res))
-        console.log(curr)
-        console.log(currentPage)
+        // const res = await api.getPagination(5, curr) // получаем пять статей
     }
-
-    console.log(currentPage)
 
     return (
         <Pagination size="small"

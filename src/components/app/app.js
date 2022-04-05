@@ -5,23 +5,23 @@ import styles from '../../styles/app.module.scss'
 import PaginationArticles from "../pagination";
 import ApiService from "../../utilities/api-service/api-service";
 import {useDispatch} from "react-redux";
-import {setLengthOfPosts} from "../../redux/actions";
+import {getArticles, setLengthOfPosts} from "../../redux/actions";
 
 
 const BlogPlatform = () => {
 
-    const dispatch = useDispatch();
-
-    const getList = async () => {
-        // const api = new ApiService();
-        // const res = await api.getListOfArticles() // получаем общий массив
-        // dispatch(setLengthOfPosts(res.length - 1)) // обновляем стейт totalCount
-        // console.log(await api.getPagination(5, 25))
-    }
-
-    useEffect( () => {
-        const res = getList()
-    }, [])
+    // const dispatch = useDispatch();
+    //
+    // const getList = async () => {
+    //     // const api = new ApiService();
+    //     // const res = await api.getListOfArticles() // получаем общий массив
+    //     // dispatch(setLengthOfPosts(res.length - 1)) // обновляем стейт totalCount
+    //     // console.log(await api.getPagination(5, 25))
+    // }
+    //
+    // useEffect( () => {
+    //     dispatch(getArticles)
+    // }, [])
 
 
     return (

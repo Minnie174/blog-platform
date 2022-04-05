@@ -12,19 +12,16 @@ export default class ApiService {
         return articles; // массив с двумя значениями: статьи и общее число статей
     }
 
-    // async getListOfArticles() { // получаем статьи
-    //     const res = await this.getRequest()
-    //     return res.articles;
-    // }
-    //
-    // async getNumberOfArticles() { // олучаем количество статей
-    //     const res = await this.getRequest();
-    //     return res.articlesCount;
-    // }
-
     async getPagination(limit, query) {
-        const res = await fetch(`${this.apiBase}articles?limit=${limit}&offset=${query}`)
+        const offset = query === 1 ? 0 : (query - 1) * 5;
+        const res = await fetch(`${this.apiBase}articles?limit=${limit}&offset=${offset}`)
         const pagination = await res.json();
         return pagination; // выводим только пять статей на разных страницах
+    }
+
+    async getFullArticle(key) { // получаем всю статью по slug (id)
+        const res = await fetch(`${this.apiBase}articles/${key}`)
+        const result = res.json();
+        return result;
     }
 }

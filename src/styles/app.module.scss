@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  src: url("../fonts/inter-v8-latin-regular.woff");
+}
+
+body {
+  height: 980px;
+  font-family: "Inter";
+}
+
+.header {
+  width: 1210px;
+  height: 80px;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 22px;
+  padding-top: 5px;
+}
+
+.main {
+  padding-top: 1px;
+  background-color: #EBEEF3;
+  width: 1210px;
+  height: 950px;
+}
+
+.signIn {
+  margin-right: 20px;
+  color: black;
+}
+
+.signUp {
+  color: #52C41A;
+  width: 109px;
+  height: 51px;
+  padding: 6px 20px 6px 20px;
+  border: 1px solid #52C41A;
+  border-radius: 5px;
+  margin-right: 22px;
+}

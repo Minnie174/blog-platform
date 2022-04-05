@@ -1,0 +1,71 @@
+.article {
+  width: 941px;
+  height: 140px;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  margin: 30px auto;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.title {
+  color: #1890FF;
+  font-size: 20px;
+  margin-right: 13px;
+}
+
+.heart {
+  width: 16px;
+  height: 15px;
+  background-repeat: no-repeat;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.paragraph {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.name {
+  font-size: 18px;
+  width: 100%;
+  min-width: 90px;
+  margin-right: 10px;
+}
+
+.date {
+  opacity: 50%;
+  font-size: 12px;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+}
+
+.nameInfo {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px 14px 0 85px;
+}

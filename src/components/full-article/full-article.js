@@ -2,13 +2,11 @@ import React, {useEffect, useState} from "react";
 import classes from '../../styles/full-article.module.scss';
 import {format} from "date-fns";
 import Vector from "../../utilities/img/Vector.svg";
-import Avatar from '../../utilities/img/Rectangle 1.svg';
 import {Tag} from "antd";
 import ReactMarkdown from 'react-markdown';
 import {useParams} from "react-router-dom";
 import {uniqueId} from "lodash/util";
 import ApiService from "../../utilities/api-service/api-service";
-import {useSelector} from "react-redux";
 
 const FullArticle = (props) => {
     const {id} = useParams();
@@ -19,22 +17,14 @@ const FullArticle = (props) => {
         const getFull = async (key) => {
             const res = await api.getFullArticle(key)
             setArticle(await res)
-            // return await res // return null (?)
         }
         getFull(id).then(r => r)
-       // здесь надо получать слаг и передавать его - можем запихнуть его в стейт
     }, [id])
-    // теперь надо ретернуть OneArticle(article). Как нам получить конкретную статью?..
-
-    // const getTag = tag.map(el => <Tag key={uniqueId()}>{el}</Tag>);
-    console.log(article)
 
     const getDate = (whenCreated) => {
         const res = format(new Date(whenCreated), 'MMMM dd, yyyy');
         return res;
     }
-
-    const markdown = 'Налог — обязательный, индивидуально безвозмездный платёж, принудительно взимаемый органами государственной власти различных уровней с организаций и физических лиц в целях финансового обеспечения деятельности государства и (или) муниципальных образований.\n\nЛенин Жив!\n\nНалоги следует отличать от сборов (пошлин), взимание которых носит не безвозмездный характер, а является условием совершения в отношении их плательщиков определённых действий.\n\nВзимание налогов регулируется налоговым законодательством.\n\nСовокупность установленных налогов, а также принципов, форм и методов их установления, изменения, отмены, взимания и контроля образуют налоговую систему государства.\n\nВ РФ различаются налоги трех видов: федеральные, региональные и местные.\n\nПеречень налогов каждого из видов установлен Налоговым кодексом РФ.\\n\\nОрганы государственной власти не вправе вводить дополнительные налоги обязательные отчисления, не предусмотренные законодательством РФ, равно как и повышать ставки установленных налогов и налоговых платежей.'
 
     return (
         <div className={classes['full-article']}>

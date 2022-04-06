@@ -3,7 +3,6 @@ import {Route, Routes, Link} from "react-router-dom";
 import ArticlesList from "../articles-list";
 import styles from '../../styles/app.module.scss'
 import PaginationArticles from "../pagination";
-import {useDispatch} from "react-redux";
 import FullArticle from "../full-article";
 import Header from "../header";
 
@@ -17,17 +16,21 @@ const BlogPlatform = () => {
                         <Routes>
                             <Route
                                 path="/"
-                                element={<ArticlesList />}
+                                element={
+                                    <>
+                                    <ArticlesList />
+                                    <PaginationArticles />
+                                    </>}
                             />
                             <Route />
                             <Route path="articles/:id"
-                                   element={<FullArticle />}/>
+                                   element={<FullArticle />}
+                            />
                         </Routes>
                     </div>
-                    <PaginationArticles />
                 </main>
         </div>
     )
 };
 
-export default BlogPlatform; // потом в роутс надо будет прописать страницу с регистрацией
+export default BlogPlatform;

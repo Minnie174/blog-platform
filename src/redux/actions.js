@@ -1,5 +1,4 @@
 import ApiService from "../utilities/api-service/api-service";
-import {useSelector} from "react-redux";
 
 export const ARTICLE_ACTION_TYPE = 'GET_ARTICLES';
 export const ARTICLE_ACTION_LOAD = 'IS_LOADING';
@@ -14,8 +13,9 @@ export const fetchDispatch = (limit, query) => async (dispatch) => { // thunk
     const api = new ApiService();
 
     try {
-        const response2 = await api.getPagination(limit, query);
+        const response2 = await api.getPagination(limit, query, dispatch);
         dispatch(getArticles(response2))
+        // dispatch(getLoading(false))
     } catch (e) {
         console.log(e)
     }

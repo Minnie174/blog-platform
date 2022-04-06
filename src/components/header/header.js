@@ -1,7 +1,5 @@
 import React from "react";
 import styles from "../../styles/header.module.scss";
-
-import ArticlesList from "../articles-list";
 import {Link} from "react-router-dom";
 
 const Header = () => {

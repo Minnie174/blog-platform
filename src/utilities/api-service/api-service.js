@@ -1,3 +1,5 @@
+import {getLoading} from "../../redux/actions";
+
 export default class ApiService {
 
     apiBase = 'https://kata.academy:8021/api/';
@@ -12,10 +14,11 @@ export default class ApiService {
         return articles; // массив с двумя значениями: статьи и общее число статей
     }
 
-    async getPagination(limit, query) {
+    async getPagination(limit, query, cdDispatch) {
         const offset = query === 1 ? 0 : (query - 1) * 5;
         const res = await fetch(`${this.apiBase}articles?limit=${limit}&offset=${offset}`)
         const pagination = await res.json();
+        cdDispatch(getLoading(false))
         return pagination; // выводим только пять статей на разных страницах
     }
 

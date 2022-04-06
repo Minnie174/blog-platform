@@ -2,6 +2,8 @@ import React, {useEffect} from "react";
 import Article from "../article";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchDispatch, getArticles} from "../../redux/actions";
+import {Route, Routes, Link} from "react-router-dom";
+import FullArticle from "../full-article";
 // import styles from '../../styles/articles-list.module.scss';
 
 const ArticlesList = () => {
@@ -16,8 +18,9 @@ const ArticlesList = () => {
 
     const article = newResponse.map(el => { // возвращается массив с артиклями
         return (
-            <Article
+                <Article
                 key={el.id}
+                id={el.slug}
                 title={el.title}
                 info={el.description}
                 date={el.createdAt}
@@ -32,6 +35,7 @@ const ArticlesList = () => {
     return (
         <div>
             {article}
+            {/*<FullArticle />*/}
         </div>
     )
 }

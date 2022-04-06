@@ -3,12 +3,12 @@ import {Tag} from 'antd';
 import 'antd/dist/antd.css';
 import styles from '../../styles/article.module.scss';
 import Vector from '../../utilities/img/Vector.svg';
-import Avatar from '../../utilities/img/Rectangle 1.svg';
 import {format} from "date-fns";
 import {uniqueId} from "lodash/util";
+import {Link} from "react-router-dom";
 
 const Article = (props) => {
-    const {title, info, date, tag, num, profile, avatar} = props;
+    const {title, info, date, tag, num, profile, avatar, id} = props;
 
     const getDate = (whenCreated) => {
         const res = format(new Date(whenCreated), 'MMMM dd, yyyy');
@@ -16,12 +16,13 @@ const Article = (props) => {
     }
 
     const getTag = tag.map(el => <Tag key={uniqueId()}>{el}</Tag>);
+    const path = `articles/${id}`
 
     return (
         <div className={styles.article}>
             <div className={styles.main}>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.title}>{title}</h1>
+                    <Link to={path}><h1 className={styles.title}>{title}</h1></Link>
                     <img src={Vector} className={styles.heart} alt="like"/>
                     <span>{num}</span>
                 </div>

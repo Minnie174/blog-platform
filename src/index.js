@@ -6,10 +6,10 @@ import {store} from "./redux";
 import BlogPlatform from "./components/app/app";
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Provider store={store}>
-            <BlogPlatform />
-        </Provider>
-    </BrowserRouter>,
+        <BrowserRouter>
+            <Provider store={store}>
+                <BlogPlatform />
+            </Provider>
+        </BrowserRouter>,
   document.getElementById('root')
 );

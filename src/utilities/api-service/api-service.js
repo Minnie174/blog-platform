@@ -21,7 +21,7 @@ export default class ApiService {
 
     async getFullArticle(key) { // получаем всю статью по slug (id)
         const res = await fetch(`${this.apiBase}articles/${key}`)
-        const result = res.json();
-        return result;
+        const result = await res.json();
+        return result.article;
     }
 }

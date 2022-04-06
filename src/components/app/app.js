@@ -3,44 +3,31 @@ import {Route, Routes, Link} from "react-router-dom";
 import ArticlesList from "../articles-list";
 import styles from '../../styles/app.module.scss'
 import PaginationArticles from "../pagination";
-import ApiService from "../../utilities/api-service/api-service";
 import {useDispatch} from "react-redux";
-import {getArticles, setLengthOfPosts} from "../../redux/actions";
+import FullArticle from "../full-article";
+import Header from "../header";
 
 
 const BlogPlatform = () => {
-
-    // const dispatch = useDispatch();
-    //
-    // const getList = async () => {
-    //     // const api = new ApiService();
-    //     // const res = await api.getListOfArticles() // получаем общий массив
-    //     // dispatch(setLengthOfPosts(res.length - 1)) // обновляем стейт totalCount
-    //     // console.log(await api.getPagination(5, 25))
-    // }
-    //
-    // useEffect( () => {
-    //     dispatch(getArticles)
-    // }, [])
-
-
     return (
         <div>
-            <header className={styles.header}>
-                <h1>Realworld Blog</h1>
-                <div>
-                    <a className={styles.signIn}>Sign In</a>
-                    <a className={styles.signUp}>Sign Up</a>
-                </div>
-            </header>
-            <main className={styles.main}>
-                <div>
-                    <ArticlesList />
-                </div>
-                <PaginationArticles />
-            </main>
+            <Header />
+                <main className={styles.main}>
+                    <div>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={<ArticlesList />}
+                            />
+                            <Route />
+                            <Route path="articles/:id"
+                                   element={<FullArticle />}/>
+                        </Routes>
+                    </div>
+                    <PaginationArticles />
+                </main>
         </div>
     )
 };
 
-export default BlogPlatform;
+export default BlogPlatform; // потом в роутс надо будет прописать страницу с регистрацией

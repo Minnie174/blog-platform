@@ -10,7 +10,6 @@ const ArticlesList = () => {
     const newResponse = articlesList.map(el => ({...el, id: el.slug})) // с уникальным айди
     const loading = useSelector(state => state.articles.isLoading)
     const currentPage = useSelector(state => state.articles.currentPage) // по дефолту 1
-    console.log(loading)
 
     useEffect( () => {
         // dispatch(getLoading(true))

@@ -7,8 +7,8 @@ const Header = () => {
         <header className={styles.header}>
             <Link style={{ textDecoration: 'none', color: 'black' }} to="/">Realworld Blog</Link>
             <div>
-                <a className={styles.signIn}>Sign In</a>
-                <a className={styles.signUp}>Sign Up</a>
+                <Link to="sign-in" className={styles.signIn}>Sign In</Link>
+                <Link to="sign-up" className={styles.signUp}>Sign Up</Link>
             </div>
         </header>
     )

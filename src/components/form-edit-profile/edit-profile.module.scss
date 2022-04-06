@@ -1,6 +1,6 @@
-.signIn {
+.main {
   width: 384px;
-  height: 374px;
+  height: 500px;
   background-color: white;
   margin: 60px auto 0 auto;
   display: flex;
@@ -10,7 +10,7 @@
   border-radius: 5px;
 }
 
-.sign {
+.edit {
   font-size: 20px;
   font-weight: 600;
   margin-top: 45px;
@@ -23,13 +23,6 @@
   border-radius: 5px;
 }
 
-.text {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
 .button {
   width: 318px;
   height: 40px;
@@ -37,8 +30,3 @@
   margin-top: 15px;
 }
 
-.acc {
-  font-size: 12px;
-  margin-top: 5px;
-  color: darkgrey;
-}

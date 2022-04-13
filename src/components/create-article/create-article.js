@@ -7,6 +7,10 @@ import TextArea from "antd/es/input/TextArea";
 
 const CreateArticle = () => {
 
+    const defaultValue = {
+        tag: [{name: ''}]
+    }
+
     const {
         register,
         control,
@@ -15,61 +19,13 @@ const CreateArticle = () => {
         },
         handleSubmit,
     } = useForm({
-        defaultValues: {
-            name: 'tag'
-        }
+        defaultValues: defaultValue
     })
 
     const {fields, append, remove} = useFieldArray({control, name: 'tag'});
 
-    const {field} = useController({name: 'tag', control, rules: {required: true}, defaultValue: ""})
-
-    const onSubmit = (data) => {
-        console.log(data)
-    }
-
-    const Tag = () => {
-        return (
-            <div className={styles.oneTag}>
-                <Controller render={({field}) =>
-                    <Input
-                        className={styles.tagInput}
-                        placeholder="Text"
-                        {...field}/>}
-                            rules={{ required: true}}
-                            name="Text"
-                            control={control}
-                            defaultValue=""
-                />
-                <Button className={styles.buttonDelete} danger>Delete</Button>
-            </div>
-        )
-    }
-
-    const Tags = () => {
-        return (
-            <div>
-                {fields.map((el, index) => {
-                    return (
-                        <div key={el.id}>
-                            <Controller render={({field}) =>
-                                <Input
-                                    className={styles.tagInput}
-                                    placeholder="Text"
-                                    {...field}
-                                />}
-                                        rules={{ required: true}}
-                                        name={`tag.${index}.text`}
-                                        control={control}
-                                        defaultValue=""
-                            />
-                            <Button className={styles.buttonDelete} onClick={() => remove(index)} danger>Delete</Button>
-                        </div>
-                    )
-                })}
-                <Button className={styles.add} onClick={addTag}>Add tag</Button>
-            </div>
-        )
+    const addTag = () => {
+        append({name: ''}) // прописать добавление тэга
     }
 
     const tagList = fields.map((el, index) => {
@@ -87,44 +43,17 @@ const CreateArticle = () => {
                                 rules={{ required: true}}
                                 name={`tag[${index}].name`}
                                 control={control}
-                        // defaultValue={"name"}
                     />
                 </div>
-                {firstTag !== index} || fields.length > 1 ? <Button className={styles.buttonDelete} onClick={() => remove(index)} danger>Delete</Button> : ''}
+                <Button className={styles.buttonDelete} onClick={() => remove(index)} danger>Delete</Button>
+                {/*{firstTag !== index || fields.length > 1 ? <Button className={styles.buttonDelete} onClick={() => remove(index)} danger>Delete</Button> : ''}*/}
                 {lastTag === index ? <Button className={styles.add} onClick={addTag}>Add tag</Button> : ''}
             </div>
         )
     })
 
-    // const Tags1 = () => {
-    //     return (
-    //         <div>
-    //             {fields.map((el, index) => {
-    //                 return (
-    //                     <div>
-    //                         <Controller render={({field}) =>
-    //                             <Input
-    //                                 className={styles.tagInput}
-    //                                 placeholder="Text"
-    //                                 {...field}
-    //                             />}
-    //                                     rules={{ required: true}}
-    //                                     name="Text"
-    //                                     control={control}
-    //                                     defaultValue=""
-    //                         />
-    //                         <Button className={styles.buttonDelete} onClick={() => remove(index)} danger>Delete</Button>
-    //                 )
-    //                 }
-    //             }
-    //         </div>
-    //     )
-    // }
-
-    console.log(fields)
-
-    const addTag = () => {
-        append({name: ''}) // прописать добавление тэга
+    const onSubmit = (data) => {
+        console.log(data)
     }
 
     return (
@@ -170,25 +99,7 @@ const CreateArticle = () => {
                             defaultValue=""
                 />
             </div>
-            <div>
-                {fields.map((el, index) => {
-                    return (
-                        <div className={styles.tags} key={el.id}>
-                            <input type='text' {...register(`tag[${index}].name`)} defaultValue=""/>
-                            <Button className={styles.buttonDelete} onClick={() => remove(index)} danger>Delete</Button>
-                        </div>
-                    );
-                })}
-            </div>
-            <Button className={styles.add} onClick={addTag}>Add tag</Button>
-            {/*<div className={styles.tags}>*/}
-            {/*    <p>Tags</p>*/}
-            {/*    <div className={styles.tagsFirst}>*/}
-            {/*        <Tag />*/}
-            {/*        <Tags />*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-            {/*<Button className={styles.add} onClick={addTag}>Add tag</Button>*/}
+            {tagList}
             <Button type="primary" htmlType="submit" className={styles.send}>Send</Button>
         </form>
     )

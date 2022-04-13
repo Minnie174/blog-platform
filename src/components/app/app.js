@@ -7,6 +7,9 @@ import FullArticle from "../full-article";
 import Header from "../header";
 import SignIn from "../form-sign-in";
 import SignUp from "../form-sign-up";
+import {RequireAuth} from "../../hoc/RequireAuth";
+import EditProfile from "../profile";
+import CreateArticle from "../create-article";
 
 
 const BlogPlatform = () => {
@@ -33,6 +36,12 @@ const BlogPlatform = () => {
                             />
                             <Route path="sign-up"
                                    element={<SignUp />}
+                            />
+                            <Route path="profile"
+                                   element={<RequireAuth><EditProfile /></RequireAuth>}
+                            />
+                            <Route path="new-article"
+                                   element={<RequireAuth><CreateArticle /></RequireAuth>}
                             />
                         </Routes>
                     </div>

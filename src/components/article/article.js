@@ -22,6 +22,7 @@ const Article = (props) => {
         <div className={styles.article}>
             <div className={styles.main}>
                 <div className={styles.headerTitle}>
+                    <Link to="profile">Edit profile</Link>
                     <Link to={path}><h1 className={styles.title}>{title}</h1></Link>
                     <img src={Vector} className={styles.heart} alt="like"/>
                     <span>{num}</span>

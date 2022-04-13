@@ -2,15 +2,17 @@ import React, {useEffect, useState} from "react";
 import classes from '../../styles/full-article.module.scss';
 import {format} from "date-fns";
 import Vector from "../../utilities/img/Vector.svg";
-import {Tag} from "antd";
+import {Button, Tag, Popconfirm, message} from "antd";
 import ReactMarkdown from 'react-markdown';
 import {useParams} from "react-router-dom";
 import {uniqueId} from "lodash/util";
 import ApiService from "../../utilities/api-service/api-service";
+import {useSelector} from "react-redux";
 
-const FullArticle = (props) => {
+const FullArticle = () => {
     const {id} = useParams();
     const [article, setArticle] = useState(null)
+    const isAuth = useSelector(state => state.user.isAuth);
 
     useEffect(() => {
         const api = new ApiService();
@@ -24,6 +26,29 @@ const FullArticle = (props) => {
     const getDate = (whenCreated) => {
         const res = format(new Date(whenCreated), 'MMMM dd, yyyy');
         return res;
+    }
+
+    const confirm = () => {
+        console.log('confirm') // прописать логику удаления статьи (?)
+    }
+
+    const cancel = () => {
+        console.log('cancel')
+    }
+
+    const IsLogin = () => {
+        return (
+            <div className={classes.buttons}>
+                <Popconfirm title="Are you sure to delete this article?"
+                onConfirm={confirm}
+                onCancel={cancel}
+                okText="Yes"
+                cancelText="No">
+                    <Button className={classes.delete} danger>Delete</Button>
+                </Popconfirm>
+                <Button className={classes.edit}>Edit</Button>
+            </div>
+        )
     }
 
     return (
@@ -42,13 +67,16 @@ const FullArticle = (props) => {
                             {article.description}
                         </div>
                     </div>
-                    <div className={classes['change-profile']}>
-                        <div className={classes.info}>
-                            <div className={classes.name}>{article.author.username}</div>
-                            <div className={classes.date}>{getDate(article.createdAt)}</div>
+                        <div className={classes.profileInfo}>
+                            <div className={classes['change-profile']}>
+                                <div className={classes.info}>
+                                    <div className={classes.name}>{article.author.username}</div>
+                                    <div className={classes.date}>{getDate(article.createdAt)}</div>
+                                </div>
+                                <img src={article.author.image} className={classes.avatar} alt="avatar"/>
+                            </div>
+                            {isAuth ? <IsLogin /> : null}
                         </div>
-                        <img src={article.author.image} className={classes.avatar} alt="avatar"/>
-                    </div>
                 </div>
                 <div className={classes.description}>
                     <ReactMarkdown children={article.body}>

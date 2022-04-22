@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from './sign-in.module.scss';
-import {Button, Checkbox, Input} from "antd";
+import {Button, Checkbox, Input, notification} from "antd";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm, Controller} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,7 +11,7 @@ const SignIn = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-    const userData = useSelector(state => state.user.userLogin)
+    const userIsError = useSelector(state => state.user.isError) // если тру, то не сабмитим
 
     const {
         control,
@@ -25,13 +25,18 @@ const SignIn = () => {
     })
 
     const onSubmit = (data) => {
-        const {Email, Password} = data;
+        const {email, password} = data;
 
-        console.log(Email, Password);
-        dispatch(fetchLogin(Email, Password));
-        // localStorage.setItem('user', JSON.stringify(userData))
+        console.log(email, password);
+        dispatch(fetchLogin(email, password));
 
-        navigate ('/') // потом прописать норм хедер
+        if (userIsError) {
+            return notification['warning']({
+                message: 'Error',
+                description: 'Something got wrong'
+            })
+        }
+        navigate ('/')
         reset();
     }
     return (
@@ -48,7 +53,7 @@ const SignIn = () => {
                                 minLength: 6,
                                 maxLength: 40,
                             }}
-                            name="Email"
+                            name="email"
                             control={control}
                             defaultValue=""
                 />
@@ -64,7 +69,7 @@ const SignIn = () => {
                             rules={{ required: true,
                                 minLength: 1
                             }}
-                            name="Password"
+                            name="password"
                             control={control}
                             defaultValue=""
                 />

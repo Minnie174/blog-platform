@@ -1,10 +1,18 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styles from '../../styles/profile.module.scss';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import {Button, Input} from "antd";
+import {Button, Input, notification} from "antd";
+import ApiService from "../../utilities/api-service/api-service";
+import {editUser, loginUsers} from "../../redux/actions";
+import {useDispatch, useSelector} from "react-redux";
 
 const EditProfile = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const error = useSelector(state => state.user.isErrorEdit);
+    const info = useSelector(state => state.user.isEdited)
+
     const {
         control,
         formState: {
@@ -16,9 +24,21 @@ const EditProfile = () => {
         mode: 'onBlur'
     })
 
+    const openWarning = (type) => {
+        notification[type]({
+            message: 'Error',
+            description: 'Something got wrong'
+        })
+    }
+
     const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+        dispatch(editUser(data))
+        dispatch(loginUsers(data))
         reset();
+        if (error === true) {
+            return openWarning('warning')
+        }
+        navigate('/');
     }
 
     return (
@@ -64,7 +84,7 @@ const EditProfile = () => {
                                 minLength: 6,
                                 maxLength: 40
                             }}
-                            name="Password"
+                            name="password"
                             control={control}
                             defaultValue=""
                 />

@@ -10,6 +10,7 @@ import SignUp from "../form-sign-up";
 import {RequireAuth} from "../../hoc/RequireAuth";
 import EditProfile from "../profile";
 import CreateArticle from "../create-article";
+import EditArticle from "../edit-article";
 
 
 const BlogPlatform = () => {
@@ -42,6 +43,9 @@ const BlogPlatform = () => {
                             />
                             <Route path="new-article"
                                    element={<RequireAuth><CreateArticle /></RequireAuth>}
+                            />
+                            <Route path="articles/:slug/edit"
+                                   element={<RequireAuth><EditArticle /></RequireAuth>}
                             />
                         </Routes>
                     </div>

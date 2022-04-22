@@ -1,8 +1,10 @@
-import {getLoading, loginUser} from "../../redux/actions";
+import {getLoading, loginUsers} from "../../redux/actions";
 
 export default class ApiService {
 
     apiBase = 'https://kata.academy:8021/api/';
+
+    token = JSON.parse(localStorage.getItem('token')) || ""
 
     async getRequest() {
         const res = await fetch(`${this.apiBase}articles`);
@@ -16,14 +18,45 @@ export default class ApiService {
 
     async getPagination(limit, query, cdDispatch) {
         const offset = query === 1 ? 0 : (query - 1) * 5;
-        const res = await fetch(`${this.apiBase}articles?limit=${limit}&offset=${offset}`)
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${this.token}`
+            },
+        }
+        const res = await fetch(`${this.apiBase}articles?limit=${limit}&offset=${offset}`, options)
         const pagination = await res.json();
         cdDispatch(getLoading(false))
         return pagination; // выводим только пять статей на разных страницах
     }
 
     async getFullArticle(key) { // получаем всю статью по slug (id)
-        const res = await fetch(`${this.apiBase}articles/${key}`)
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${this.token}`
+            },
+        }
+        const res = await fetch(`${this.apiBase}articles/${key}`, options)
+        const result = await res.json();
+        return result.article;
+    }
+
+    async getArticle(slug) {
+        const token = this.token;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+        }
+        const res = await fetch(`${this.apiBase}articles/${slug}`, options) // тут мы получаем сведения о статье, которую хотим отредачить
         const result = await res.json();
         return result.article;
     }
@@ -45,8 +78,6 @@ export default class ApiService {
             body: JSON.stringify(newUser)
         };
 
-        console.log(options)
-
         const res = await fetch(`${this.apiBase}users`, options);
         const result = await res.json();
         console.log(result)
@@ -60,6 +91,7 @@ export default class ApiService {
                 password: password
             }
         };
+
         const options = {
             method: 'POST',
             headers: {
@@ -70,25 +102,155 @@ export default class ApiService {
         };
 
         const res = await fetch(`${this.apiBase}users/login`, options);
-        const result = await res.json();
-        console.log(result.user.token)
+        if (!res.ok) {
+            throw new Error(`Something went wrong`)
+        }
+        console.log(res)
+        return await res.json()
+    }
 
-        // const token = result.user.token;
+    async loginAgain() {
         const token = JSON.parse(localStorage.getItem('token'))
-
-        const options2 = {
+        const options = {
             method: 'GET',
             headers: {
-                Authorization: `Token ${token}`,
+                'Accept': 'application/json',
+                // 'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+        };
+        const res = await fetch(`${this.apiBase}user`, options)
+        // console.log(res, await res.json())
+        return await res.json()
+    }
+
+    async editProfile(dataUser) {
+        const token = this.token
+        const user = {
+            user: {
+                email: dataUser.email,
+                username: dataUser.username,
+                bio: null,
+                image: dataUser.image,
+                token: this.token
+            }
+        }
+        console.log(user)
+        const options = {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+            body: JSON.stringify(user)
+        }
+
+        const res = await fetch(`${this.apiBase}/user`, options);
+        return res // response.ok
+    }
+
+    async createArticle(title, description, body, tagList = []) {
+        const token = this.token
+        const article = {
+            article: {
+                title: title,
+                description: description,
+                body: body,
+                tagList: tagList
             }
         }
 
-        const res2 = await fetch(`${this.apiBase}user`, {
+        const options = {
+            method: 'POST',
             headers: {
-                Authorization: `Token ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+            body: JSON.stringify(article)
+        };
+
+        const res = await fetch(`${this.apiBase}articles`, options);
+        const result = await res.json();
+        return result;
+    }
+
+    async deleteArticle(slug) {
+        const token = this.token;
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+        }
+        const res = await fetch(`${this.apiBase}articles/${slug}`, options)
+        const result = await res.json();
+        return result;
+    }
+
+    async editArticle(title, description, body, tagList, slug) {
+        const token = this.token;
+        const article = {
+            article: {
+                title: title,
+                description: description,
+                body: body,
+                tagList: tagList
             }
-        });
-        console.log(await res2.json())
-        return await res2.json();
+        }
+        const options = {
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+            body: JSON.stringify(article)
+        }
+
+        const res = await fetch(`${this.apiBase}articles/${slug}`, options)
+        return res;
+    }
+
+    async putLike(slug) {
+        const token = this.token
+        console.log(token)
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+        };
+        const res = await fetch(`${this.apiBase}articles/${slug}/favorite`, options)
+        if (res.ok) {
+            return res;
+        }
+        console.log(await res.json())
+    }
+
+    async deleteLike(slug) {
+        const token = this.token
+
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`
+            },
+        };
+
+        const res = await fetch(`${this.apiBase}articles/${slug}/favorite`, options);
+        if (res.ok) {
+            return res;
+        }
+        console.log(res)
+
     }
 }

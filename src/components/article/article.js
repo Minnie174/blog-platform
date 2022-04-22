@@ -1,14 +1,34 @@
-import React from "react";
-import {Tag} from 'antd';
+import React, {useEffect, useState} from "react";
+import {notification, Tag} from 'antd';
 import 'antd/dist/antd.css';
 import styles from '../../styles/article.module.scss';
 import Vector from '../../utilities/img/Vector.svg';
 import {format} from "date-fns";
 import {uniqueId} from "lodash/util";
 import {Link} from "react-router-dom";
+import {HeartFilled, HeartOutlined} from "@ant-design/icons";
+import classes from "../../styles/full-article.module.scss";
+import {deleteLike, fetchDispatch, isLiked, likeArticle} from "../../redux/actions";
+import {useDispatch, useSelector} from "react-redux";
 
 const Article = (props) => {
-    const {title, info, date, tag, num, profile, avatar, id} = props;
+    const {title, info, date, tag, num, profile, avatar, id, fav, likeArticle} = props;
+    const isToken = JSON.parse(localStorage.getItem('token')) !== null;
+    const dispatch = useDispatch();
+    const likeStatus = useSelector(state => state.articles.isLike) // изначально null ?
+    const currentPage = useSelector(state => state.articles.currentPage)
+    const isErrorLike = useSelector(state => state.articles.isError);
+
+    // const handleLike = () => {
+    //     console.log('like');
+    //     if (isToken) {
+    //         if (!fav) {
+    //             dispatch(likeArticle(id))
+    //         }
+    //             dispatch(deleteLike(id))
+    //     }
+    //     dispatch(isLiked(false)) // вывести сообщение об ошибке
+    // }
 
     const getDate = (whenCreated) => {
         const res = format(new Date(whenCreated), 'MMMM dd, yyyy');
@@ -22,9 +42,8 @@ const Article = (props) => {
         <div className={styles.article}>
             <div className={styles.main}>
                 <div className={styles.headerTitle}>
-                    <Link to="profile">Edit profile</Link>
                     <Link to={path}><h1 className={styles.title}>{title}</h1></Link>
-                    <img src={Vector} className={styles.heart} alt="like"/>
+                    {fav ? <HeartFilled style={{color: '#1890FF', cursor: 'pointer'}} className={classes.heart} onClick={likeArticle}/> : <HeartOutlined className={classes.heart} onClick={likeArticle}/>}
                     <span>{num}</span>
                 </div>
                 <div>

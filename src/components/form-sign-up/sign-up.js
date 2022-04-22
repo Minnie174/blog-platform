@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import styles from './sign-up.module.scss';
 import {Button, Checkbox, Input} from "antd";
 import {Link, useHistory, useLocation, useNavigate} from "react-router-dom";
@@ -21,9 +21,12 @@ const SignUp = (props) => {
         },
         reset,
         handleSubmit,
+        watch
     } = useForm({
         mode: 'onBlur'
     })
+    const password = useRef({});
+    password.current = watch("Password", "");
 
     const onSubmit = (data) => {
         const {Username, Password, Email} = data; // вытащили данные
@@ -98,7 +101,8 @@ const SignUp = (props) => {
                         className={styles.input}
                         placeholder="Repeat password"
                         {...field}/>}
-                            rules={{ required: true }}
+                            rules={{ required: true,
+                                    validate: value => value === password.current || 'The passwords do not match'}}
                             name="Repeat"
                             control={control}
                             defaultValue=""

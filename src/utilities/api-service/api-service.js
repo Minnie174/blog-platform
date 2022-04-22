@@ -80,7 +80,6 @@ export default class ApiService {
 
         const res = await fetch(`${this.apiBase}users`, options);
         const result = await res.json();
-        console.log(result)
         return result;
     }
 
@@ -105,7 +104,6 @@ export default class ApiService {
         if (!res.ok) {
             throw new Error(`Something went wrong`)
         }
-        console.log(res)
         return await res.json()
     }
 
@@ -135,7 +133,6 @@ export default class ApiService {
                 token: this.token
             }
         }
-        console.log(user)
         const options = {
             method: 'PUT',
             headers: {
@@ -217,7 +214,6 @@ export default class ApiService {
 
     async putLike(slug) {
         const token = this.token
-        console.log(token)
 
         const options = {
             method: 'POST',
@@ -231,7 +227,6 @@ export default class ApiService {
         if (res.ok) {
             return res;
         }
-        console.log(await res.json())
     }
 
     async deleteLike(slug) {
@@ -250,7 +245,5 @@ export default class ApiService {
         if (res.ok) {
             return res;
         }
-        console.log(res)
-
     }
 }

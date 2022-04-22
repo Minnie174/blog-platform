@@ -67,7 +67,6 @@ const CreateArticle = ({howToHandleSubmit}) => {
 
     const onSubmit = (data) => {
         const {Title, Description, Text, tag} = data;
-        console.log(Title, Description, Text, tag);
         const tagList = tag.map(el => Object.values(el)).flat();
         dispatch(createNewArticle(Title, Description, Text, tagList))
         dispatch(fetchDispatch(5, 1, dispatch))

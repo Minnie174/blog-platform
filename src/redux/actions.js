@@ -59,7 +59,7 @@ export const fetchDispatch = (limit, query) => async (dispatch) => { // запр
         const response = await api.getPagination(limit, query, dispatch);
         dispatch(getArticles(response))
     } catch (e) {
-        console.log(e) // прописать уведомление об ошибке
+        // прописать уведомление об ошибке
     }
 } // загрузка статей с пагинацией // меняю isError на null каждый раз после логина
 
@@ -69,13 +69,11 @@ export const fetchRegistration = (username, email, password) => async (dispatch)
     try {
         const response = await api.registrateUser(username, email, password);
         const { user } = response; // вытаскиваем user'a
-        console.log(user)
         dispatch(setNewUser(user));
         dispatch(isErrorUser(false));
         localStorage.setItem('token', JSON.stringify(user.token))
         localStorage.setItem('user', JSON.stringify(user))
     } catch (e){
-        console.log(e)
         dispatch(isErrorUser(true)); // прописать уведомление
     }
 }
@@ -91,13 +89,11 @@ export const fetchLogin = (email, password) => async (dispatch) => {
         dispatch(isErrorUser(false))
         const res = await api.loginAgain();
         const {user} = res
-        console.log(res)
         localStorage.setItem('user', JSON.stringify(user))
         localStorage.setItem('token', JSON.stringify(user.token));
         localStorage.setItem('auth', JSON.stringify(true))
         dispatch(loginUsers(user))
     } catch(e) {
-        console.log(e)
         dispatch(isErrorUser(true))
     }
 }
@@ -108,11 +104,9 @@ export const getSingleArticle = (slug) => async (dispatch) => {
 
     try {
         const response = await api.getFullArticle(slug)
-        console.log(response)
         dispatch(getSinglePage(response)); // пихаем всю статью в стор
         dispatch(getLoading(false))
     } catch (e) {
-        console.log(e)
     }
 }
 
@@ -122,12 +116,10 @@ export const getOldArticle = (slug) => async (dispatch) => {
 
     try {
         const response = await api.getArticle(slug)
-        console.log(response)
         dispatch(isEdited(response))
         dispatch(getLoading(false))
         // будем диспатчить слаг в стор, а потом сверять - если слаг совпадает, то закрашиваем
     } catch (e) {
-        console.log(e)
     }
 }
 
@@ -136,10 +128,8 @@ export const createNewArticle = (title, description, body, tagList) => async (di
 
     try {
         const response = await api.createArticle(title, description, body, tagList)
-        console.log(response)
         dispatch(isCreated(true))
     } catch (e) {
-        console.log(e)
     }
 }
 
@@ -166,7 +156,6 @@ export const deleteNews = (slug) => async (dispatch) => {
         const response = await api.deleteArticle(slug);
         dispatch(isDeleted(true))
     } catch (e) {
-        console.log(e)
     }
 }
 
@@ -180,7 +169,6 @@ export const editingArticle = (title, description, body, tagList, slug) => async
             dispatch(isEdited(result))
         }
     } catch (e) {
-        console.log(e)
     }
 }
 
@@ -195,7 +183,6 @@ export const likeArticle = (slug) => async (dispatch) => {
         }
         // dispatch(isEdited(fullArticle.actions))
     } catch (e) {
-        console.log(e)
         dispatch(isLiked(false));
         dispatch(isErrorLike(true));
         // добавить уведомление об ошибке
@@ -213,7 +200,6 @@ export const deleteLike = (slug) => async (dispatch) => {
             dispatch(isErrorLike(false))
         }
     } catch (e) {
-        console.log(e)
         dispatch(isLikeDelete(false));
         dispatch(isErrorLike(true));
         // добавить уведомление об ошибке

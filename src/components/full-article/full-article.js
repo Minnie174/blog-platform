@@ -71,7 +71,6 @@ const FullArticle = () => {
         }
 
         const cancel = () => {
-            console.log('cancel')
         }
 
         const editNews = () => {

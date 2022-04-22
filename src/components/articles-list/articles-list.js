@@ -24,7 +24,6 @@ const ArticlesList = () => {
 
     const statusLike = useSelector(state => state.articles.isLike);
     const statusUnLike = useSelector(state => state.articles.isUnlike);
-    console.log(statusLike, statusUnLike)
 
     useEffect( () => {
         dispatch(fetchDispatch(5, currentPage, dispatch))

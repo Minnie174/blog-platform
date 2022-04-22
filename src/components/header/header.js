@@ -13,7 +13,6 @@ const Header = () => {
     const isAuth = useSelector(state => state.user.isAuth);
     const isAuth2 = JSON.parse(localStorage.getItem('auth')) === true
     const nameUser = JSON.parse(localStorage.getItem('user')) || ''
-    console.log(nameUser)
 
     const [name, setName] = useState(nameUser);
     const [image, setImage] = useState(userLogin2.image);
@@ -32,15 +31,6 @@ const Header = () => {
         localStorage.clear();
         dispatch(isAuth(false))
     }
-
-    // if (isToken) {
-    //     console.log('true');
-    //     if (name === null) {
-    //         return <Loader />
-    //     }
-    // }
-
-
     const ifName = !nameUser.username ? <Loader /> : nameUser.username
 
     return (

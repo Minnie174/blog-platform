@@ -15,8 +15,6 @@ const EditArticle = () => {
     const info = useSelector(state => state.articles.fullArticle); // запихнули инфу о статье в стор
     const user = JSON.parse(localStorage.getItem('user'))
     const userInfo = info.author.username
-    console.log(userInfo)
-    console.log(user.username.toLowerCase())
 
     const tagsObject = info.tagList === undefined ? [{name: ''}] : info.tagList.map((tag) => Object.fromEntries([['name', tag]]));
 
@@ -27,12 +25,10 @@ const EditArticle = () => {
     useEffect(() => { // вроде как получаю данные с сервера о статье
         // dispatch(editingArticle(info.title, info.description, info.body, info.tagList, slug))
         dispatch(getOldArticle(slug))
-        console.log('edit')
     }, [])
 
     const handleSubmit = (data) => {
         const {Title, Text, Description, tag} = data;
-        console.log(data)
         const tagNew = tag.map(el => Object.values(el)).flat();
         dispatch(editingArticle(Title, Description, Text, tagNew, slug))
         navigate('/')

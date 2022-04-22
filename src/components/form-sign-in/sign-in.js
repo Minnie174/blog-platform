@@ -26,8 +26,6 @@ const SignIn = () => {
 
     const onSubmit = (data) => {
         const {email, password} = data;
-
-        console.log(email, password);
         dispatch(fetchLogin(email, password));
 
         if (userIsError) {

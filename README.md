@@ -1,1 +1,1 @@
-[Blog-platform](https://blog-platform-puyz6zrht-minnie174.vercel.app/)
+[Blog-platform](https://blog-platform-minnie174.vercel.app/)

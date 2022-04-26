@@ -1,42 +1,44 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect} from "react";
 import styles from "../../styles/header.module.scss";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import Rectangle from '../../utilities/img/Rectangle 1.svg'
-import ApiService from "../../utilities/api-service/api-service";
 import Loader from "../loader";
 
 const Header = () => {
     const dispatch = useDispatch();
-    const userLogin = useSelector(state => state.user.userRegistration);
-    const userLogin2 = useSelector(state => state.user.userLogin);
-    const isAuth = useSelector(state => state.user.isAuth);
-    const isAuth2 = JSON.parse(localStorage.getItem('auth')) === true
+    const navigate = useNavigate();
+    const isAuth = useSelector(state => state.userLogin.isAuth);
+    const isAuth2 = JSON.parse(localStorage.getItem('auth'))
     const nameUser = JSON.parse(localStorage.getItem('user')) || ''
-
-    const [name, setName] = useState(nameUser);
-    const [image, setImage] = useState(userLogin2.image);
-
-    useEffect(() => { // меняет картинку
-        setImage(image)
-    }, [image])
-
-    useEffect(() => { // меняет имя пользователя
-        setName(name)
-    }, [name])
-
-    const isToken = JSON.parse(localStorage.getItem('token')) !== null;
+    const image1 = useSelector(state => state.userLogin.image)
+    let image = JSON.parse(localStorage.getItem('image'))
+    const errorEdit = useSelector(state => state.userEdit.isError)
+    const isLogin2 = useSelector(state => state.userLogin.isLogin)
 
     const logOut = () => {
         localStorage.clear();
         dispatch(isAuth(false))
     }
+
+    // const initHistory = useCallback(() => {
+    //     image = JSON.parse(localStorage.getItem('image'))
+    //     navigate('/')
+    // }, [isAuth2, image])
+
+    useEffect(() => {
+        if (!errorEdit) {
+            image = JSON.parse(localStorage.getItem('image'))
+        }
+        // initHistory()
+        navigate('/')
+    }, [isAuth2, image, isAuth, errorEdit])
+
     const ifName = !nameUser.username ? <Loader /> : nameUser.username
 
-    return (
-        <header className={styles.header}>
-            <Link style={{ textDecoration: 'none', color: 'black' }} to="/">Realworld Blog</Link>
-            {isAuth2 &&
+
+    const Authorized = () => {
+        if (isAuth === null) return null;
+        return (
             <div className={styles.logUser}>
                 <Link to="new-article" className={styles.create}>Create article</Link>
                 <Link to="profile" className={styles.profile}>
@@ -45,6 +47,14 @@ const Header = () => {
                 </Link>
                 <Link to ="/" className={styles.logOut} onClick={logOut}>Log out</Link>
             </div>
+        )
+    }
+
+    return (
+        <header className={styles.header}>
+            <Link style={{ textDecoration: 'none', color: 'black' }} to="/">Realworld Blog</Link>
+            {isAuth2 &&
+            <Authorized />
             }
             {!isAuth2 &&
             <div>

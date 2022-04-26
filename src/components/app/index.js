@@ -1,3 +1,3 @@
-import BlogPlatform from "./app";
+import App from "./app";
 
-export default BlogPlatform;
+export default App;

@@ -1,18 +1,18 @@
 import React, {useRef, useState} from "react";
 import styles from './sign-up.module.scss';
-import {Button, Checkbox, Input} from "antd";
-import {Link, useHistory, useLocation, useNavigate} from "react-router-dom";
+import {Button, Checkbox, Input, notification} from "antd";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchRegistration} from "../../redux/actions";
-const SignUp = (props) => {
+import {fetchRegistration} from "../../redux/actions/user";
+import {isLogin} from "../../redux/actions/user-login";
+
+const SignUp = () => {
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const fromPage = location.state || '/';
     const dispatch = useDispatch();
 
-    const isErrorRegistration = useSelector(state => state.user.isError)
+    const isErrorRegistration = useSelector(state => state.userReg.isError)
 
     const {
         control,
@@ -28,14 +28,22 @@ const SignUp = (props) => {
     const password = useRef({});
     password.current = watch("Password", "");
 
+    const openWarning = (type, description) => {
+        notification[type]({
+            message: 'Error',
+            description: description
+        })
+    }
+
     const onSubmit = (data) => {
         const {Username, Password, Email} = data; // вытащили данные
-
         dispatch(fetchRegistration(Username, Email, Password));
-
-        if (!isErrorRegistration) {
-            navigate('/sign-in')
+        if (isErrorRegistration === false) {
+            openWarning('warning', 'something went wrong with registration')
+            dispatch(isLogin(null));
         }
+        navigate('/sign-in')
+
     }
 
     return (

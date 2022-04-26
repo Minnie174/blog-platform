@@ -1,10 +1,12 @@
-import {getLoading, loginUsers} from "../../redux/actions";
+import {getLoading} from "../../redux/actions/articles";
 
 export default class ApiService {
 
     apiBase = 'https://kata.academy:8021/api/';
 
-    token = JSON.parse(localStorage.getItem('token')) || ""
+    user = JSON.parse(localStorage.getItem('user'))
+
+    token = this.user === null? '' : this.user.token
 
     async getRequest() {
         const res = await fetch(`${this.apiBase}articles`);
@@ -32,7 +34,21 @@ export default class ApiService {
         return pagination; // выводим только пять статей на разных страницах
     }
 
-    async getFullArticle(key) { // получаем всю статью по slug (id)
+    // async getFullArticle(key) { // получаем всю статью по slug (id)
+    //     const options = {
+    //         method: 'GET',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             Authorization: `Token ${this.token}`
+    //         },
+    //     }
+    //     const res = await fetch(`${this.apiBase}articles/${key}`, options)
+    //     const result = await res.json();
+    //     return result.article;
+    // }
+
+    async getArticle(slug) {
         const options = {
             method: 'GET',
             headers: {
@@ -41,27 +57,12 @@ export default class ApiService {
                 Authorization: `Token ${this.token}`
             },
         }
-        const res = await fetch(`${this.apiBase}articles/${key}`, options)
-        const result = await res.json();
-        return result.article;
-    }
-
-    async getArticle(slug) {
-        const token = this.token;
-        const options = {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
-            },
-        }
         const res = await fetch(`${this.apiBase}articles/${slug}`, options) // тут мы получаем сведения о статье, которую хотим отредачить
         const result = await res.json();
         return result.article;
     }
 
-    async registrateUser(username, email, password) { // регистрация
+    async registerUser(username, email, password) { // регистрация
         const newUser = {
             user: {
                 username: username,
@@ -79,15 +80,20 @@ export default class ApiService {
         };
 
         const res = await fetch(`${this.apiBase}users`, options);
+        if (!res.ok) {
+            throw new Error('Could not register')
+        }
         const result = await res.json();
+        localStorage.setItem('token', JSON.stringify(result.user.token))
+        console.log(result)
         return result;
     }
 
     async loginUser(email, password) { // логинимся
         const user = {
-            user: {
-                email: email,
-                password: password
+            "user": {
+                "email": email,
+                "password": password
             }
         };
 
@@ -102,35 +108,40 @@ export default class ApiService {
 
         const res = await fetch(`${this.apiBase}users/login`, options);
         if (!res.ok) {
-            throw new Error(`Something went wrong`)
+            throw new Error(`Something went wrong with authorization`)
         }
-        return await res.json()
+        const result = await res.json();
+        console.log(result)
+        return result;
     }
 
     async loginAgain() {
-        const token = JSON.parse(localStorage.getItem('token'))
         const options = {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                // 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                'Content-Type': 'application/json',
+                Authorization: `Token ${this.token}`
             },
         };
         const res = await fetch(`${this.apiBase}user`, options)
-        // console.log(res, await res.json())
-        return await res.json()
+        if (!res.ok) {
+            throw new Error(`Something went wrong with authorization`)
+        }
+        const result = await res.json();
+        console.log(result)
+        return result;
     }
 
     async editProfile(dataUser) {
-        const token = this.token
+        if(!dataUser) throw new Error('Missing data');
         const user = {
-            user: {
-                email: dataUser.email,
-                username: dataUser.username,
-                bio: null,
-                image: dataUser.image,
-                token: this.token
+            "user": {
+                "email": dataUser.email,
+                "username": dataUser.username,
+                "bio": null,
+                "image": dataUser.image,
+                "token": this.token
             }
         }
         const options = {
@@ -138,23 +149,25 @@ export default class ApiService {
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                Authorization: `Token ${this.token}`
             },
             body: JSON.stringify(user)
         }
 
         const res = await fetch(`${this.apiBase}/user`, options);
-        return res // response.ok
+        if (!res.ok) {
+            throw new Error(`Something went wrong with editing profile`)
+        }
+        return await res.json() // response.ok
     }
 
     async createArticle(title, description, body, tagList = []) {
-        const token = this.token
         const article = {
-            article: {
-                title: title,
-                description: description,
-                body: body,
-                tagList: tagList
+            "article": {
+                "title": title,
+                "description": description,
+                "body": body,
+                "tagList": tagList
             }
         }
 
@@ -163,7 +176,7 @@ export default class ApiService {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                Authorization: `Token ${this.token}`
             },
             body: JSON.stringify(article)
         };
@@ -174,13 +187,12 @@ export default class ApiService {
     }
 
     async deleteArticle(slug) {
-        const token = this.token;
         const options = {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                Authorization: `Token ${this.token}`
             },
         }
         const res = await fetch(`${this.apiBase}articles/${slug}`, options)
@@ -189,13 +201,12 @@ export default class ApiService {
     }
 
     async editArticle(title, description, body, tagList, slug) {
-        const token = this.token;
         const article = {
-            article: {
-                title: title,
-                description: description,
-                body: body,
-                tagList: tagList
+            "article": {
+                "title": title,
+                "description": description,
+                "body": body,
+                "tagList": tagList
             }
         }
         const options = {
@@ -203,7 +214,7 @@ export default class ApiService {
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                Authorization: `Token ${this.token}`
             },
             body: JSON.stringify(article)
         }
@@ -213,37 +224,41 @@ export default class ApiService {
     }
 
     async putLike(slug) {
-        const token = this.token
-
         const options = {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                Authorization: `Token ${this.token}`
             },
         };
         const res = await fetch(`${this.apiBase}articles/${slug}/favorite`, options)
         if (res.ok) {
             return res;
         }
+        console.log(res)
+        if (res.status === 500) {
+            throw new Error('Internal Server Error')
+        }
     }
 
     async deleteLike(slug) {
-        const token = this.token
-
         const options = {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
+                Authorization: `Token ${this.token}`
             },
         };
 
         const res = await fetch(`${this.apiBase}articles/${slug}/favorite`, options);
         if (res.ok) {
             return res;
+        }
+        console.log(res)
+        if (res.status === 500) {
+            throw new Error('Internal Server Error')
         }
     }
 }

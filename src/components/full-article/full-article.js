@@ -1,39 +1,37 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import classes from '../../styles/full-article.module.scss';
 import {format} from "date-fns";
-import Vector from "../../utilities/img/Vector.svg";
 import {Button, Tag, Popconfirm, message, notification} from "antd";
 import ReactMarkdown from 'react-markdown';
 import {useNavigate, useParams} from "react-router-dom";
 import {uniqueId} from "lodash/util";
-import ApiService from "../../utilities/api-service/api-service";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteLike, deleteNews, getOldArticle, getSingleArticle, likeArticle} from "../../redux/actions";
 import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 import Loader from "../loader";
+import {getArticle, getOldArticle, getSingleArticle} from "../../redux/actions/single-article";
+import {deleteLike, likeArticle} from "../../redux/actions/likes";
+import {deleteNews} from "../../redux/actions/article-edit";
+import {fetchDispatch} from "../../redux/actions/articles";
 
 const FullArticle = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {id} = useParams();
 
-    const loading = useSelector(state => state.articles.isLoading)
+    const loading = useSelector(state => state.singleArticle.isLoading)
     const isToken = JSON.parse(localStorage.getItem('token')) !== null; // true - значит, залогинен
-    const articleOne = useSelector(state => state.articles.fullArticle)
+    const isAuth = JSON.parse(localStorage.getItem('auth'))
+    const articleOne = useSelector(state => state.singleArticle.fullArticle)
 
-    const statusLike = useSelector(state => state.articles.isLike);
-    const statusUnLike = useSelector(state => state.articles.isUnlike);
-    const isErrorLike = useSelector(state => state.articles.isError);
+    const statusLike = useSelector(state => state.likes.isLike);
+    const statusUnLike = useSelector(state => state.likes.isUnlike);
+    const isErrorLike = useSelector(state => state.likes.isError);
 
-    const info = useSelector(state => state.articles.fullArticle); // запихнули инфу о статье в стор
+    const info = useSelector(state => state.singleArticle.fullArticle); // запихнули инфу о статье в стор
     const user = JSON.parse(localStorage.getItem('user')) || ''
 
     useEffect(() => {
-        if (!isToken) {
-            dispatch(getSingleArticle(id)) // мб поменять
-        }
-        dispatch(getSingleArticle(id))
-        dispatch(getOldArticle(id))
+        dispatch(getArticle(id))
     }, [id, statusLike, statusUnLike]) // может и прокатит, но тогда надо оперативно менять статус лайка.
 
     const renderArticle = (fillArticle) => {
@@ -43,9 +41,10 @@ const FullArticle = () => {
             if (isToken) {
                 if (!favorited) {
                     dispatch(likeArticle(id))
+                } if (favorited) {
+                    dispatch(deleteLike(id))
                 }
-                dispatch(deleteLike(id))
-            } else {
+            } if (!isToken) {
                 return notification['warning']({
                     message: 'Error',
                     description: 'You should sign in'
@@ -124,7 +123,7 @@ const FullArticle = () => {
                                 </div>
                                 <img src={author.image} className={classes.avatar} alt="avatar"/>
                             </div>
-                            {isToken ? <IsLogin /> : null}
+                            {isAuth ? <IsLogin /> : null}
                         </div>
                     </div>
                     <div className={classes.description}>

@@ -13,7 +13,7 @@ import CreateArticle from "../create-article";
 import EditArticle from "../edit-article";
 
 
-const BlogPlatform = () => {
+const App = () => {
     return (
         <div>
             <Header />
@@ -22,11 +22,7 @@ const BlogPlatform = () => {
                         <Routes>
                             <Route
                                 path="/"
-                                element={
-                                    <>
-                                    <ArticlesList />
-                                    <PaginationArticles />
-                                    </>}
+                                element={<ArticlesList />}
                             />
                             <Route />
                             <Route path="articles/:id"
@@ -54,4 +50,4 @@ const BlogPlatform = () => {
     )
 };
 
-export default BlogPlatform;
+export default App;

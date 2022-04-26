@@ -1,17 +1,18 @@
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
 import styles from './sign-in.module.scss';
-import {Button, Checkbox, Input, notification} from "antd";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Button, Input, notification} from "antd";
+import {Link, useNavigate} from "react-router-dom";
 import {useForm, Controller} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchLogin} from "../../redux/actions";
+import {fetchLogin, isLogin} from "../../redux/actions/user-login";
 
 const SignIn = () => {
 
     const navigate = useNavigate();
-    const location = useLocation();
     const dispatch = useDispatch();
-    const userIsError = useSelector(state => state.user.isError) // если тру, то не сабмитим
+    const userIsError = useSelector(state => state.userReg.isError) // если тру, то не сабмитим
+    const isLogin2 = useSelector(state => state.userLogin.isLogin)
+    console.log(userIsError, isLogin2)
 
     const {
         control,
@@ -24,17 +25,45 @@ const SignIn = () => {
         mode: 'onBlur'
     })
 
+    // const initHistory = useCallback(() => {
+    //     if (!userIsError) {
+    //         openWarning('warning', 'something went wrong with registration')
+    //         dispatch(isLogin(null));
+    //     }
+    //     if (!isLogin2) {
+    //         openWarning('warning', 'you could not authorized')
+    //         dispatch(isLogin(null));
+    //     }
+    // }, [isLogin, userIsError])
+
+    useEffect(() => {
+        if (isLogin2 === false) {
+            openWarning('warning', 'you could not authorized')
+            dispatch(isLogin(null));
+        }
+    }, [isLogin2, userIsError])
+
+    const openWarning = (type, description) => {
+        notification[type]({
+            message: 'Error',
+            description: description
+        })
+    }
+
     const onSubmit = (data) => {
         const {email, password} = data;
         dispatch(fetchLogin(email, password));
 
-        if (userIsError) {
-            return notification['warning']({
-                message: 'Error',
-                description: 'Something got wrong'
-            })
-        }
-        navigate ('/')
+        // if (userIsError) {
+        //     return notification['warning']({
+        //         message: 'Error',
+        //         description: 'Something got wrong'
+        //     })
+        // }
+        // if (!isLogin2) {
+        //     openWarning('warning')
+        // }
+        navigate('/')
         reset();
     }
     return (

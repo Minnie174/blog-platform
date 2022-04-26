@@ -1,19 +1,10 @@
 import React from "react";
 import styles from '../../styles/edit-create.module.scss';
 import {Button, Input} from "antd";
-import {Link} from "react-router-dom";
 import {Controller, useFieldArray, useForm} from "react-hook-form";
-import {useDispatch} from "react-redux";
-import {createNewArticle} from "../../redux/actions";
 import TextArea from "antd/es/input/TextArea";
 
 const EditCreate = ({title, description, body, onHandleSubmit, nameList, value}) => {
-    const dispatch = useDispatch();
-
-    const defaultValue = {
-        tag: value
-    } // убираем
-
     const {
         control,
         formState: {
@@ -22,7 +13,7 @@ const EditCreate = ({title, description, body, onHandleSubmit, nameList, value})
         handleSubmit,
     } = useForm({
         defaultValues: value
-    }) // оставляем
+    })
 
     const {fields, append, remove} = useFieldArray({control, name: 'tag'}); // оставляем
 

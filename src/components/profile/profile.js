@@ -3,15 +3,15 @@ import styles from '../../styles/profile.module.scss';
 import {Link, useNavigate} from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import {Button, Input, notification} from "antd";
-import ApiService from "../../utilities/api-service/api-service";
-import {editUser, loginUsers} from "../../redux/actions";
 import {useDispatch, useSelector} from "react-redux";
+import {loginUsers} from "../../redux/actions/user-login";
+import {editUser} from "../../redux/actions/user-edit";
 
 const EditProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const error = useSelector(state => state.user.isErrorEdit);
-    const info = useSelector(state => state.user.isEdited)
+    const error = useSelector(state => state.userEdit.isError);
+    const info = useSelector(state => state.userEdit.isEdited)
 
     const {
         control,

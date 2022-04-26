@@ -25,17 +25,6 @@ const SignIn = () => {
         mode: 'onBlur'
     })
 
-    // const initHistory = useCallback(() => {
-    //     if (!userIsError) {
-    //         openWarning('warning', 'something went wrong with registration')
-    //         dispatch(isLogin(null));
-    //     }
-    //     if (!isLogin2) {
-    //         openWarning('warning', 'you could not authorized')
-    //         dispatch(isLogin(null));
-    //     }
-    // }, [isLogin, userIsError])
-
     useEffect(() => {
         if (isLogin2 === false) {
             openWarning('warning', 'you could not authorized')
@@ -53,16 +42,6 @@ const SignIn = () => {
     const onSubmit = (data) => {
         const {email, password} = data;
         dispatch(fetchLogin(email, password));
-
-        // if (userIsError) {
-        //     return notification['warning']({
-        //         message: 'Error',
-        //         description: 'Something got wrong'
-        //     })
-        // }
-        // if (!isLogin2) {
-        //     openWarning('warning')
-        // }
         navigate('/')
         reset();
     }

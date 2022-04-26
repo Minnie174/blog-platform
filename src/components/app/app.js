@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from "react";
-import {Route, Routes, Link} from "react-router-dom";
+import React from "react";
+import {Route, Routes} from "react-router-dom";
 import ArticlesList from "../articles-list";
 import styles from '../../styles/app.module.scss'
-import PaginationArticles from "../pagination";
 import FullArticle from "../full-article";
 import Header from "../header";
 import SignIn from "../form-sign-in";

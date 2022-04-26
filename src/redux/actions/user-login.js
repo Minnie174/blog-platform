@@ -13,17 +13,7 @@ const api = new ApiService();
 export const fetchLogin = (email, password) => async (dispatch) => {
     try {
         const response = await api.loginUser(email, password); // логиним пользователя в системе
-        // dispatch(isAuth(true));
-        const {user} = response
-        // dispatch(isLogin(true));
-        // const res2 = await api.loginAgain(); // get current user
-        // const {user} = res2
-        console.log(user)
-        // localStorage.setItem('user', JSON.stringify(user))
-        // localStorage.setItem('token', JSON.stringify(user.token));
-        // localStorage.setItem('auth', JSON.stringify(true));
         dispatch(getLogin())
-        // dispatch(loginUsers(user))
     } catch(e) {
         dispatch(isLogin(false))
     }
@@ -34,7 +24,6 @@ export const getLogin = () => async (dispatch) => {
         const response = await api.loginAgain();
         dispatch(isAuth(true));
         const {user} = response;
-        console.log(user);
         localStorage.setItem('user', JSON.stringify(user))
         localStorage.setItem('token', JSON.stringify(user.token));
         localStorage.setItem('auth', JSON.stringify(true));

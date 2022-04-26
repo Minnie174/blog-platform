@@ -16,7 +16,6 @@ export const fetchRegistration = (username, email, password) => async (dispatch)
         const response = await api.registerUser(username, email, password); // запрос-регистрация
         const { user } = response; // вытаскиваем user'a
         dispatch(setNewUser(user)); // в сторе новые данные
-        // dispatch(isLogin(true));
         dispatch(isErrorUser(true)); // ошибка при регистрации
         localStorage.setItem('token', JSON.stringify(user.token))
         localStorage.setItem('user', JSON.stringify(user))

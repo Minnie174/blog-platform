@@ -25,7 +25,6 @@ const FullArticle = () => {
 
     const statusLike = useSelector(state => state.likes.isLike);
     const statusUnLike = useSelector(state => state.likes.isUnlike);
-    const isErrorLike = useSelector(state => state.likes.isError);
 
     const info = useSelector(state => state.singleArticle.fullArticle); // запихнули инфу о статье в стор
     const user = JSON.parse(localStorage.getItem('user')) || ''
@@ -66,7 +65,6 @@ const FullArticle = () => {
             }
             dispatch(deleteNews(slug));
             navigate('/')
-            // прописать логику удаления статьи (?) // диспатчим запрос на удаление статьи
         }
 
         const cancel = () => {

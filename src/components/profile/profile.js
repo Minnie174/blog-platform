@@ -11,7 +11,6 @@ const EditProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const error = useSelector(state => state.userEdit.isError);
-    const info = useSelector(state => state.userEdit.isEdited)
 
     const {
         control,

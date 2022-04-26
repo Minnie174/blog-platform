@@ -10,26 +10,18 @@ const Header = () => {
     const isAuth = useSelector(state => state.userLogin.isAuth);
     const isAuth2 = JSON.parse(localStorage.getItem('auth'))
     const nameUser = JSON.parse(localStorage.getItem('user')) || ''
-    const image1 = useSelector(state => state.userLogin.image)
     let image = JSON.parse(localStorage.getItem('image'))
     const errorEdit = useSelector(state => state.userEdit.isError)
-    const isLogin2 = useSelector(state => state.userLogin.isLogin)
 
     const logOut = () => {
         localStorage.clear();
         dispatch(isAuth(false))
     }
 
-    // const initHistory = useCallback(() => {
-    //     image = JSON.parse(localStorage.getItem('image'))
-    //     navigate('/')
-    // }, [isAuth2, image])
-
     useEffect(() => {
         if (!errorEdit) {
             image = JSON.parse(localStorage.getItem('image'))
         }
-        // initHistory()
         navigate('/')
     }, [isAuth2, image, isAuth, errorEdit])
 

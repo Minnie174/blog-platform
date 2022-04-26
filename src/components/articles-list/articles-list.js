@@ -10,7 +10,6 @@ import {useNavigate} from "react-router-dom";
 
 const ArticlesList = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const articlesList = useSelector(state => state.articles.articlesData); // массив со всеми статьями
     const newResponse = articlesList.map(el => ({...el, id: el.slug})) // с уникальным айди
     const loading = useSelector(state => state.articles.isLoading)
@@ -18,7 +17,6 @@ const ArticlesList = () => {
     const totalCount = useSelector(state => state.articles.totalCount);
     const currentPage = useSelector(state => state.articles.currentPage) // по дефолту 1
     const isToken = JSON.parse(localStorage.getItem('token')) !== null;
-    const isLogin = useSelector(state => state.userLogin.isLogin) // false по дефолту
 
     const statusLike = useSelector(state => state.likes.isLike);
     const statusUnLike = useSelector(state => state.likes.isUnlike);
@@ -31,21 +29,6 @@ const ArticlesList = () => {
             dispatch(isLikeDelete(null));
         }
     }, [currentPage, statusLike, statusUnLike, isToken, isErrorLike])
-
-    // const handleLike = (el) => {
-    //     if (isToken) {
-    //         if (!el.favorited) {
-    //             dispatch(likeArticle(el.slug))
-    //         } if(el.favorited) {
-    //             dispatch(deleteLike(el.slug))
-    //         }
-    //     } else {
-    //         return notification['warning']({
-    //             message: 'Error',
-    //             description: 'You should sign in'
-    //         })
-    //     }
-    // }
 
     const loader = loading ? <Loader /> : null;
 
@@ -62,7 +45,6 @@ const ArticlesList = () => {
                 fav={el.favorited}
                 profile={el.author.username}
                 avatar={el.author.image}
-                // likeArticle={() => handleLike(el)}
             />
         )
     })

@@ -11,17 +11,9 @@ export const isLogin = (payload) => ({type: IS_ERROR_LOGIN, payload}); // пол
 const api = new ApiService();
 
 export const fetchLogin = (email, password) => async (dispatch) => {
+    dispatch(isLogin('load'))
     try {
         const response = await api.loginUser(email, password); // логиним пользователя в системе
-        dispatch(getLogin())
-    } catch(e) {
-        dispatch(isLogin(false))
-    }
-}
-
-export const getLogin = () => async (dispatch) => {
-    try {
-        const response = await api.loginAgain();
         dispatch(isAuth(true));
         const {user} = response;
         localStorage.setItem('user', JSON.stringify(user))
@@ -29,7 +21,7 @@ export const getLogin = () => async (dispatch) => {
         localStorage.setItem('auth', JSON.stringify(true));
         dispatch(loginUsers(user));
         dispatch(isLogin(true));
-    } catch (e) {
+    } catch(e) {
         dispatch(isLogin(false))
     }
 }

@@ -4,7 +4,7 @@ import {Button, Input} from "antd";
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import TextArea from "antd/es/input/TextArea";
 
-const EditCreate = ({title, description, body, onHandleSubmit, nameList, value}) => {
+const FormCreateFormArticle = ({title, description, body, onHandleSubmit, nameList, value}) => {
     const {
         control,
         formState: {
@@ -94,4 +94,4 @@ const EditCreate = ({title, description, body, onHandleSubmit, nameList, value})
     )
 }
 
-export default EditCreate;
+export default FormCreateFormArticle;

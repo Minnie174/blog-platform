@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useEffect} from "react";
 import styles from './sign-in.module.scss';
 import {Button, Input, notification} from "antd";
 import {Link, useNavigate} from "react-router-dom";
@@ -11,8 +11,7 @@ const SignIn = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const userIsError = useSelector(state => state.userReg.isError) // если тру, то не сабмитим
-    const isLogin2 = useSelector(state => state.userLogin.isLogin)
-    console.log(userIsError, isLogin2)
+    const isAuth = useSelector(state => state.userLogin.isLogin)
 
     const {
         control,
@@ -26,11 +25,11 @@ const SignIn = () => {
     })
 
     useEffect(() => {
-        if (isLogin2 === false) {
+        if (isAuth === false) {
             openWarning('warning', 'you could not authorized')
             dispatch(isLogin(null));
         }
-    }, [isLogin2, userIsError])
+    }, [isAuth, userIsError])
 
     const openWarning = (type, description) => {
         notification[type]({
@@ -42,8 +41,9 @@ const SignIn = () => {
     const onSubmit = (data) => {
         const {email, password} = data;
         dispatch(fetchLogin(email, password));
-        navigate('/')
-        reset();
+        if (isAuth) {
+            navigate('/')
+        }
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.signIn}>

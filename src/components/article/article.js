@@ -9,6 +9,7 @@ import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 import classes from "../../styles/full-article.module.scss";
 import {deleteLike, likeArticle} from "../../redux/actions/likes";
 import {useDispatch, useSelector} from "react-redux";
+import {fetchDispatch} from "../../redux/actions/articles";
 
 const Article = (props) => {
     const {title, info, date, tag, num, profile, avatar, id, fav} = props;

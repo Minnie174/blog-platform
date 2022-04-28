@@ -1,3 +1,3 @@
-import EditCreate from "./edit-create";
+import FormCreateFormArticle from "./form-create-form-article";
 
-export default EditCreate;
+export default FormCreateFormArticle;

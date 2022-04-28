@@ -1,10 +1,10 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styles from './sign-up.module.scss';
 import {Button, Checkbox, Input, notification} from "antd";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchRegistration} from "../../redux/actions/user";
+import {fetchRegistration, isErrorUser} from "../../redux/actions/user";
 import {isLogin} from "../../redux/actions/user-login";
 
 const SignUp = () => {
@@ -28,6 +28,13 @@ const SignUp = () => {
     const password = useRef({});
     password.current = watch("Password", "");
 
+    useEffect(() => {
+        if (isErrorRegistration === false) {
+            openWarning('warning', 'something went wrong with registration')
+            dispatch(isErrorUser(null));
+        }
+    }, [isErrorRegistration])
+
     const openWarning = (type, description) => {
         notification[type]({
             message: 'Error',
@@ -42,8 +49,9 @@ const SignUp = () => {
             openWarning('warning', 'something went wrong with registration')
             dispatch(isLogin(null));
         }
-        navigate('/sign-in')
-
+        if (isErrorRegistration) {
+            navigate('/sign-in')
+        }
     }
 
     return (

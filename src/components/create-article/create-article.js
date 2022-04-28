@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useForm, useFieldArray, useController} from "react-hook-form";
 import {notification} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import EditCreate from "../form-reate-form-article";
+import FormCreateFormArticle from "../form-reate-form-article";
 import {useNavigate} from "react-router-dom";
 import {createNewArticle} from "../../redux/actions/article-create";
 import {fetchDispatch} from "../../redux/actions/articles";
@@ -17,10 +17,6 @@ const CreateArticle = ({howToHandleSubmit}) => {
     const defaultValue = {
         tag: [{name: ''}]
     }
-
-    useEffect(() => {
-
-    }, [])
 
     const {
         formState: {
@@ -49,7 +45,7 @@ const CreateArticle = ({howToHandleSubmit}) => {
     }
 
     return (
-        <EditCreate value={defaultValue} title="" body="" description="" nameList={"Create actions"} onHandleSubmit={onSubmit} />
+        <FormCreateFormArticle value={defaultValue} title="" body="" description="" nameList={"Create actions"} onHandleSubmit={onSubmit} />
     )
 }
 

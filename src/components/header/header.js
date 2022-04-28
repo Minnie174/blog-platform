@@ -12,6 +12,7 @@ const Header = () => {
     const nameUser = JSON.parse(localStorage.getItem('user')) || ''
     let image = JSON.parse(localStorage.getItem('image'))
     const errorEdit = useSelector(state => state.userEdit.isError)
+    const isImage = nameUser.image ? nameUser.image : image
 
     const logOut = () => {
         localStorage.clear();
@@ -35,7 +36,7 @@ const Header = () => {
                 <Link to="new-article" className={styles.create}>Create article</Link>
                 <Link to="profile" className={styles.profile}>
                     <div className={styles.name}>{ifName}</div>
-                    <img className={styles.avatar} src={image} alt="avatar"/>
+                    <img className={styles.avatar} src={isImage} alt="avatar"/>
                 </Link>
                 <Link to ="/" className={styles.logOut} onClick={logOut}>Log out</Link>
             </div>

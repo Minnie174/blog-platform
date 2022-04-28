@@ -85,7 +85,6 @@ export default class ApiService {
         }
         const result = await res.json();
         localStorage.setItem('token', JSON.stringify(result.user.token))
-        console.log(result)
         return result;
     }
 
@@ -111,7 +110,6 @@ export default class ApiService {
             throw new Error(`Something went wrong with authorization`)
         }
         const result = await res.json();
-        console.log(result)
         return result;
     }
 
@@ -129,7 +127,6 @@ export default class ApiService {
             throw new Error(`Something went wrong with authorization`)
         }
         const result = await res.json();
-        console.log(result)
         return result;
     }
 
@@ -236,7 +233,6 @@ export default class ApiService {
         if (res.ok) {
             return res;
         }
-        console.log(res)
         if (res.status === 500) {
             throw new Error('Internal Server Error')
         }
@@ -256,7 +252,6 @@ export default class ApiService {
         if (res.ok) {
             return res;
         }
-        console.log(res)
         if (res.status === 500) {
             throw new Error('Internal Server Error')
         }

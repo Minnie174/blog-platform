@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import Article from "../article";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
-import {Pagination} from "antd";
+import {notification, Pagination} from "antd";
 import styles from "../../styles/pagination.module.scss";
 import {fetchDispatch, setCurrentPage} from "../../redux/actions/articles";
 import {isLiked, isLikeDelete} from "../../redux/actions/likes";
@@ -28,7 +28,18 @@ const ArticlesList = () => {
         } if (statusLike === false || statusUnLike === false) {
             dispatch(isLikeDelete(null));
         }
+        if (isErrorLike) {
+            openWarning('warning', 'try refreshing page');
+            dispatch(isLikeDelete(null));
+        }
     }, [currentPage, statusLike, statusUnLike, isToken, isErrorLike])
+
+    const openWarning = (type, description) => {
+        notification[type]({
+            message: 'Error',
+            description: description
+        })
+    }
 
     const loader = loading ? <Loader /> : null;
 

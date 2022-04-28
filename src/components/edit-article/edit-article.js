@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import EditCreate from "../form-reate-form-article";
+import FormCreateFormArticle from "../form-reate-form-article";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
@@ -47,7 +47,7 @@ const EditArticle = () => {
     return (
         <div>
             {loader}
-            <EditCreate value={defaultValue} title={info.title} description={info.description} body={info.body} onHandleSubmit={handleSubmit} nameList={'Edit article'} />
+            <FormCreateFormArticle value={defaultValue} title={info.title} description={info.description} body={info.body} onHandleSubmit={handleSubmit} nameList={'Edit article'} />
         </div>
     )
 }

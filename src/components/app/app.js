@@ -4,8 +4,8 @@ import ArticlesList from "../articles-list";
 import styles from '../../styles/app.module.scss'
 import FullArticle from "../full-article";
 import Header from "../header";
-import SignIn from "../form-sign-in";
-import SignUp from "../form-sign-up";
+import SignIn from "../sign-in";
+import SignUp from "../sign-up";
 import {RequireAuth} from "../../hoc/RequireAuth";
 import EditProfile from "../profile";
 import CreateArticle from "../create-article";

@@ -33,7 +33,6 @@ const FormCreateFormArticle = ({title, description, body, onHandleSubmit, nameLi
                             placeholder="Tag"
                             {...field}
                         />}
-                                rules={{ required: true}}
                                 name={`tag[${index}].name`}
                                 control={control}
                     />

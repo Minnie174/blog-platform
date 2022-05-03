@@ -1,19 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import styles from '../../styles/profile.module.scss';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import {Button, Input, notification} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {loginUsers} from "../../redux/actions/user-login";
-import {editUser} from "../../redux/actions/user-edit";
+import {editUser, isErrorAddress, isErrorNewUser, isErrorUser} from "../../redux/actions/user-edit";
 
 const EditProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const error = useSelector(state => state.userEdit.isError);
+    const info = JSON.parse(localStorage.getItem('user'))
+    const image = info.image ? info.image : JSON.parse(localStorage.getItem('image'))
+
+    const isErrorEmail = useSelector(state => state.userEdit.isErrorAddress);
+    const isErrorName = useSelector(state => state.userEdit.isErrorUser);
+    console.log(isErrorName, isErrorEmail)
 
     const {
         control,
+        setError,
         formState: {
             errors,
         },
@@ -23,21 +30,42 @@ const EditProfile = () => {
         mode: 'onBlur'
     })
 
+    useEffect(() => {
+        if (isErrorName) {
+            setError("username", {type: "server", message: "is already taken"})
+            // dispatch(isErrorUser(null))
+        }
+        if (isErrorEmail) {
+            setError("email", {type: "server", message: "is already taken"})
+            // dispatch(isErrorAddress(null))
+        }
+    }, [isErrorEmail, isErrorName, error])
+
     const openWarning = (type) => {
         notification[type]({
             message: 'Error',
-            description: 'Something got wrong'
+            description: 'Update failed'
         })
     }
 
     const onSubmit = (data) => {
         dispatch(editUser(data))
         dispatch(loginUsers(data))
-        reset();
+        localStorage.setItem('image', JSON.stringify(data.image))
         if (error === true) {
-            return openWarning('warning')
+            openWarning('warning');
         }
-        navigate('/');
+        if (isErrorName) {
+            setError("username", {type: "server", message: "is already taken"})
+            dispatch(isErrorNewUser(null))
+        }
+        if (isErrorEmail) {
+            setError("email", {type: "server", message: "is already taken"})
+            dispatch(isErrorAddress(null))
+        }
+        if (!error) {
+            navigate('/');
+        }
     }
 
     return (
@@ -48,29 +76,32 @@ const EditProfile = () => {
                 <Controller render={({field}) =>
                     <Input className={styles.input}
                            placeholder="Username" {...field}/>}
-                           rules={{ required: true,
+                           rules={{
                                     minLength: 1
                             }}
                            name="username"
                            control={control}
-                           defaultValue=""
+                           defaultValue={info.username}
                 />
-                <span className={styles.error}>{errors.Username && `Don't forget to sign your name`}</span>
+                {errors.username && <span className={styles.error}>{errors.username.message || `Don't forget to sign your name`}</span> }
+                {/*<span className={styles.error}>{errors.username && `Don't forget to sign your name`}</span>*/}
             </div>
             <div className={styles.text}>
                 <label>Email address</label>
                 <Controller render={({field}) =>
                     <Input className={styles.input}
                            placeholder="Email address" {...field}/>}
-                            rules={{ required: true,
+                            rules={{
                                     pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                                     minLength: 6,
                             }}
                             name="email"
                             control={control}
-                            defaultValue=""
+                            defaultValue={info.email}
                 />
-                <span className={styles.error}>{errors.Email && `Please add a valid email`}</span>
+                {errors.email && <span className={styles.error}>{errors.email.message || `Please add a valid email`}</span> }
+
+                {/*<span className={styles.error}>{errors.email && `Please add a valid email`}</span>*/}
             </div>
             <div className={styles.text}>
                 <label>New password</label>
@@ -79,7 +110,7 @@ const EditProfile = () => {
                         className={styles.input}
                         placeholder="New password"
                         {...field}/>}
-                            rules={{ required: true,
+                            rules={{
                                 minLength: 6,
                                 maxLength: 40
                             }}
@@ -87,7 +118,7 @@ const EditProfile = () => {
                             control={control}
                             defaultValue=""
                 />
-                <span className={styles.error}>{errors.Password && `Your password needs to be at least 6 characters`}</span>
+                <span className={styles.error}>{errors.password && `Your password needs to be at least 6 characters`}</span>
 
             </div>
             <div className={styles.text}>
@@ -95,12 +126,12 @@ const EditProfile = () => {
                 <Controller render={({field}) =>
                     <Input className={styles.input}
                            placeholder="Avatar image" {...field}/>}
-                            rules={{ required: true,
+                            rules={{
                                 pattern: '/^((?:https?\:)?(?:\/{2})?)?((?:[\w\d-_]{1,64})\.(?:[\w\d-_\.]{2,64}))(\:\d{2,6})?((?:\/|\?|#|&){1}(?:[\w\d\S]+)?)?$/u' // ([^\\s]+(\\.(?i)(jpe?g|png|gif|bmp))$)
                             }}
                             name="image"
                             control={control}
-                            defaultValue=""
+                            defaultValue={image}
                 />
                 <span className={styles.error}>{errors.image && 'You need to click on agree'}</span>
             </div>

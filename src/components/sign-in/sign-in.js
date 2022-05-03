@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import styles from './sign-in.module.scss';
 import {Button, Input, notification} from "antd";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm, Controller} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchLogin, isLogin} from "../../redux/actions/user-login";
@@ -9,6 +9,8 @@ import {fetchLogin, isLogin} from "../../redux/actions/user-login";
 const SignIn = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location)
     const dispatch = useDispatch();
     const userIsError = useSelector(state => state.userReg.isError) // если тру, то не сабмитим
     const isAuth = useSelector(state => state.userLogin.isLogin)

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import classes from '../../styles/full-article.module.scss';
 import {format} from "date-fns";
 import {Button, Tag, Popconfirm, message, notification} from "antd";
@@ -8,15 +8,14 @@ import {uniqueId} from "lodash/util";
 import {useDispatch, useSelector} from "react-redux";
 import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 import Loader from "../loader";
-import {getArticle, getOldArticle, getSingleArticle} from "../../redux/actions/single-article";
+import {getArticle} from "../../redux/actions/single-article";
 import {deleteLike, likeArticle} from "../../redux/actions/likes";
 import {deleteNews} from "../../redux/actions/article-edit";
-import {fetchDispatch} from "../../redux/actions/articles";
 
 const FullArticle = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {slug} = useParams();
 
     const loading = useSelector(state => state.singleArticle.isLoading)
     const isToken = JSON.parse(localStorage.getItem('token')) !== null; // true - значит, залогинен
@@ -30,8 +29,8 @@ const FullArticle = () => {
     const user = JSON.parse(localStorage.getItem('user')) || ''
 
     useEffect(() => {
-        dispatch(getArticle(id))
-    }, [id, statusLike, statusUnLike]) // может и прокатит, но тогда надо оперативно менять статус лайка.
+        dispatch(getArticle(slug))
+    }, [slug, statusLike, statusUnLike, getArticle]) // может и прокатит, но тогда надо оперативно менять статус лайка.
 
     const renderArticle = (fillArticle) => {
         const {title, favoritesCount, favorited, description, tagList, author, body, slug, createdAt} = fillArticle;
@@ -39,9 +38,9 @@ const FullArticle = () => {
         const handleLike = () => {
             if (isToken) {
                 if (!favorited) {
-                    dispatch(likeArticle(id))
+                    dispatch(likeArticle(slug))
                 } if (favorited) {
-                    dispatch(deleteLike(id))
+                    dispatch(deleteLike(slug))
                 }
             } if (!isToken) {
                 return notification['warning']({
@@ -64,7 +63,7 @@ const FullArticle = () => {
                 })
             }
             dispatch(deleteNews(slug));
-            navigate('/')
+            navigate(`/`)
         }
 
         const cancel = () => {
@@ -108,7 +107,7 @@ const FullArticle = () => {
                                 {favorited ? <HeartFilled style={{color: '#1890FF', cursor: 'pointer'}} className={classes.heart} onClick={handleLike}/> : <HeartOutlined className={classes.heart} onClick={handleLike}/>}
                                 <span>{favoritesCount}</span>
                             </div>
-                            {tagList.map(el => <Tag key={uniqueId()}>{el}</Tag>)}
+                            {tagList ? tagList.map(el => <Tag key={uniqueId()}>{el}</Tag>) : null}
                             <div className={classes['mini-description']}>
                                 {description}
                             </div>

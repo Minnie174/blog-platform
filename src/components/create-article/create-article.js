@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {useForm, useFieldArray, useController} from "react-hook-form";
+import React from "react";
+import {useForm} from "react-hook-form";
 import {notification} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import FormCreateFormArticle from "../form-reate-form-article";
@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {createNewArticle} from "../../redux/actions/article-create";
 import {fetchDispatch} from "../../redux/actions/articles";
 
-const CreateArticle = ({howToHandleSubmit}) => {
+const CreateArticle = ({}) => {
 
     const error = useSelector(state => state.articleCreated.isCreated)
 
@@ -45,7 +45,7 @@ const CreateArticle = ({howToHandleSubmit}) => {
     }
 
     return (
-        <FormCreateFormArticle value={defaultValue} title="" body="" description="" nameList={"Create actions"} onHandleSubmit={onSubmit} />
+        <FormCreateFormArticle value={defaultValue} title="" body="" description="" nameList={"Create article"} onHandleSubmit={onSubmit} />
     )
 }
 

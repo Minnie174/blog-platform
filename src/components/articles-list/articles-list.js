@@ -6,7 +6,6 @@ import {notification, Pagination} from "antd";
 import styles from "../../styles/pagination.module.scss";
 import {fetchDispatch, setCurrentPage} from "../../redux/actions/articles";
 import {isLiked, isLikeDelete} from "../../redux/actions/likes";
-import {useNavigate} from "react-router-dom";
 
 const ArticlesList = () => {
     const dispatch = useDispatch();
@@ -45,7 +44,7 @@ const ArticlesList = () => {
 
     const article = newResponse.map(el => { // возвращается массив с артиклями
         return (
-                <Article
+            <Article
                 key={el.id}
                 id={el.slug}
                 title={el.title}

@@ -36,14 +36,14 @@ const Article = (props) => {
         }
     }
 
-    const getTag = tag.map(el => <Tag key={uniqueId()}>{el}</Tag>);
-    const path = `articles/${id}`
+    const getTag = tag ? tag.map(el => <Tag key={uniqueId()}>{el}</Tag>) : null;
+    const path = `/articles/${id}`
 
     return (
         <div className={styles.article}>
             <div className={styles.main}>
                 <div className={styles.headerTitle}>
-                    <Link to={path}><h1 className={styles.title}>{title}</h1></Link>
+                    <Link to={{pathname: path }}><h1 className={styles.title}>{title}</h1></Link>
                     {fav ? <HeartFilled style={{color: '#1890FF', cursor: 'pointer'}} className={classes.heart} onClick={handleLike}/> : <HeartOutlined className={classes.heart} onClick={handleLike}/>}
                     <span>{num}</span>
                 </div>

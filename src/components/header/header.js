@@ -38,7 +38,7 @@ const Header = () => {
                     <div className={styles.name}>{ifName}</div>
                     <img className={styles.avatar} src={isImage} alt="avatar"/>
                 </Link>
-                <Link to ="/" className={styles.logOut} onClick={logOut}>Log out</Link>
+                <Link to="/" className={styles.logOut} onClick={logOut}>Log out</Link>
             </div>
         )
     }

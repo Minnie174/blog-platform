@@ -1,11 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styles from './sign-up.module.scss';
 import {Button, Checkbox, Input, notification} from "antd";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import {Link, useNavigate} from "react-router-dom";
+import { useForm, Controller, FieldErrors } from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchRegistration, isErrorUser} from "../../redux/actions/user";
-import {isLogin} from "../../redux/actions/user-login";
+import {fetchRegistration, isErrorEmail, isErrorUser, isErrorUsername} from "../../redux/actions/user";
 
 const SignUp = () => {
 
@@ -13,9 +12,12 @@ const SignUp = () => {
     const dispatch = useDispatch();
 
     const isErrorRegistration = useSelector(state => state.userReg.isError)
+    const isErrEmail = useSelector(state => state.userReg.isErrorEmail);
+    const isErrUsername = useSelector(state => state.userReg.isErrorUsername);
 
     const {
         control,
+        setError,
         formState: {
             errors,
         },
@@ -25,6 +27,7 @@ const SignUp = () => {
     } = useForm({
         mode: 'onBlur'
     })
+
     const password = useRef({});
     password.current = watch("Password", "");
 
@@ -33,7 +36,15 @@ const SignUp = () => {
             openWarning('warning', 'something went wrong with registration')
             dispatch(isErrorUser(null));
         }
-    }, [isErrorRegistration])
+        if (isErrUsername) {
+            setError('Username', {type: "server", message: "is already taken"})
+            dispatch(isErrorUsername(null))
+        }
+        if (isErrEmail) {
+            setError('Email', {type: "server", message: "is already taken"})
+            dispatch(isErrorEmail(null))
+        }
+    }, [isErrorRegistration, isErrEmail, isErrUsername])
 
     const openWarning = (type, description) => {
         notification[type]({
@@ -45,10 +56,6 @@ const SignUp = () => {
     const onSubmit = (data) => {
         const {Username, Password, Email} = data; // вытащили данные
         dispatch(fetchRegistration(Username, Email, Password));
-        if (isErrorRegistration === false) {
-            openWarning('warning', 'something went wrong with registration')
-            dispatch(isLogin(null));
-        }
         if (isErrorRegistration) {
             navigate('/sign-in')
         }
@@ -64,16 +71,16 @@ const SignUp = () => {
                            placeholder="Username"
                            {...field}/>}
                             rules={{ required: true,
-                                    minLength: {
-                                        value: 3,
-                                        message: 'Минимум 3 символа'
-                                    },
-                                    maxLength: 20,}}
+                                minLength: {
+                                    value: 3,
+                                    message: 'Минимум 3 символа'
+                                },
+                                maxLength: 20,}}
                             name="Username"
                             control={control}
                             defaultValue=""
                 />
-                <span className={styles.error}>{errors.Username && `Don't forget to sign your name`}</span>
+                {errors.Username && <span className={styles.error}>{errors.Username.message || `Don't forget to sign your name`}</span> }
             </div>
             <div className={styles.text}>
                 <label>Email Address</label>
@@ -90,8 +97,7 @@ const SignUp = () => {
                             control={control}
                             defaultValue=""
                 />
-                <span className={styles.error}>{errors.Email && `Please add a valid email`}</span>
-
+                {errors.Email && <span className={styles.error}>{errors.Email.message || `Please add a valid email`}</span> }
             </div>
             <div className={styles.text}>
                 <label>Password</label>

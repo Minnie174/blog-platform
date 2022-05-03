@@ -34,20 +34,6 @@ export default class ApiService {
         return pagination; // выводим только пять статей на разных страницах
     }
 
-    // async getFullArticle(key) { // получаем всю статью по slug (id)
-    //     const options = {
-    //         method: 'GET',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             Authorization: `Token ${this.token}`
-    //         },
-    //     }
-    //     const res = await fetch(`${this.apiBase}articles/${key}`, options)
-    //     const result = await res.json();
-    //     return result.article;
-    // }
-
     async getArticle(slug) {
         const options = {
             method: 'GET',
@@ -80,11 +66,11 @@ export default class ApiService {
         };
 
         const res = await fetch(`${this.apiBase}users`, options);
-        if (!res.ok) {
-            throw new Error('Could not register')
-        }
         const result = await res.json();
-        localStorage.setItem('token', JSON.stringify(result.user.token))
+        if (result.errors) {
+            return result.errors
+        }
+        localStorage.setItem('token', JSON.stringify(result.user.token));
         return result;
     }
 
@@ -151,11 +137,12 @@ export default class ApiService {
             body: JSON.stringify(user)
         }
 
-        const res = await fetch(`${this.apiBase}/user`, options);
-        if (!res.ok) {
-            throw new Error(`Something went wrong with editing profile`)
+        const res = await fetch(`${this.apiBase}user`, options);
+        const result = await res.json();
+        if (result.errors) {
+            return result.errors
         }
-        return await res.json() // response.ok
+        return result;
     }
 
     async createArticle(title, description, body, tagList = []) {

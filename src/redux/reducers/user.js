@@ -1,4 +1,4 @@
-import {ADD_USER, IS_ERROR_REGISTRATION} from "../actions/user";
+import {ADD_USER, IS_ERROR_EMAIL, IS_ERROR_REGISTRATION, IS_ERROR_USERNAME} from "../actions/user";
 
 
 const initialState = {
@@ -7,7 +7,9 @@ const initialState = {
         token: null,
         username: null
     },
-    isError: null
+    isError: null,
+    isErrorEmail: null,
+    isErrorUsername: null
 }
 
 export const reducerUser = (state = initialState, action) => {
@@ -25,6 +27,16 @@ export const reducerUser = (state = initialState, action) => {
             return {
                 ...state,
                 isError: action.payload
+            }
+        case IS_ERROR_EMAIL:
+            return {
+                ...state,
+                isErrorEmail: action.payload
+            }
+        case IS_ERROR_USERNAME:
+            return {
+                ...state,
+                isErrorUsername: action.payload
             }
         default:
             return state

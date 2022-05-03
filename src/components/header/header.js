@@ -23,7 +23,6 @@ const Header = () => {
         if (!errorEdit) {
             image = JSON.parse(localStorage.getItem('image'))
         }
-        navigate('/')
     }, [isAuth2, image, isAuth, errorEdit])
 
     const ifName = !nameUser.username ? <Loader /> : nameUser.username

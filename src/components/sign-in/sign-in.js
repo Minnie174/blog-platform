@@ -9,8 +9,6 @@ import {fetchLogin, isLogin} from "../../redux/actions/user-login";
 const SignIn = () => {
 
     const navigate = useNavigate();
-    const location = useLocation();
-    console.log(location)
     const dispatch = useDispatch();
     const userIsError = useSelector(state => state.userReg.isError) // если тру, то не сабмитим
     const isAuth = useSelector(state => state.userLogin.isLogin)

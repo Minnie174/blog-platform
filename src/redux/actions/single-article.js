@@ -19,6 +19,7 @@ export const getArticle = (slug) => async (dispatch) => {
         dispatch(isGetArticle(true));
     } catch (e) {
         dispatch(isGetArticle(false)) // для серверных ошибок
+        dispatch(getLoadingArticle(false));
     }
 }
 

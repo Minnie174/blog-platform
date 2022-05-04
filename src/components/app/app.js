@@ -11,8 +11,7 @@ import EditProfile from "../profile";
 import CreateArticle from "../create-article";
 import EditArticle from "../edit-article";
 import Layout from "../layout";
-import {ToAccess} from "../../hoc/toAccess";
-
+import {RequireUser} from "../../hoc/RequireUser";
 
 const App = () => {
     return (
@@ -35,7 +34,7 @@ const App = () => {
                            element={<RequireAuth><CreateArticle /></RequireAuth>}
                     />
                     <Route path="articles/:slug/edit"
-                           element={<RequireAuth><EditArticle /></RequireAuth>}
+                           element={<RequireUser><EditArticle /></RequireUser>}
                     />
                     <Route
                         index

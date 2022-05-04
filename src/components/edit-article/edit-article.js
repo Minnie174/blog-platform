@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import FormCreateFormArticle from "../form-reate-form-article";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
 import {editingArticle} from "../../redux/actions/article-edit";
-import {getArticle} from "../../redux/actions/single-article";
+import {getArticle, isGetArticle} from "../../redux/actions/single-article";
 import {notification} from "antd";
+import {fetchDispatch} from "../../redux/actions/articles";
 
 const EditArticle = () => {
     const dispatch = useDispatch();
@@ -13,6 +14,9 @@ const EditArticle = () => {
     const {slug} = useParams();
     const loading = useSelector(state => state.singleArticle.isLoading);
     const info = useSelector(state => state.singleArticle.fullArticle);
+    const {title, description, body, author} = info;
+    const dataUser = JSON.parse(localStorage.getItem('user'))
+    // console.log(dataUser.username, author.username)
     const error = useSelector(state => state.articleEdit.isEdit);
 
     const tagsObject = info.tagList === undefined ? [{name: ''}] : info.tagList.map((tag) => Object.fromEntries([['name', tag]]));
@@ -21,9 +25,10 @@ const EditArticle = () => {
         tag: tagsObject
     }
 
+
     useEffect(() => {
         dispatch(getArticle(slug))
-    }, [])
+    }, [slug])
 
     const openWarning = (type) => {
         notification[type]({
@@ -46,8 +51,8 @@ const EditArticle = () => {
 
     return (
         <div>
-            {loader}
-            <FormCreateFormArticle value={defaultValue} title={info.title} description={info.description} body={info.body} onHandleSubmit={handleSubmit} nameList={'Edit article'} />
+            {loader ||
+            <FormCreateFormArticle value={defaultValue} title={title} description={description} body={body} onHandleSubmit={handleSubmit} nameList={'Edit article'} />}
         </div>
     )
 }

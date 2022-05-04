@@ -16,7 +16,6 @@ const EditProfile = () => {
 
     const isErrorEmail = useSelector(state => state.userEdit.isErrorAddress);
     const isErrorName = useSelector(state => state.userEdit.isErrorUser);
-    console.log(isErrorName, isErrorEmail)
 
     const {
         control,
@@ -33,11 +32,19 @@ const EditProfile = () => {
     useEffect(() => {
         if (isErrorName) {
             setError("username", {type: "server", message: "is already taken"})
-            // dispatch(isErrorUser(null))
+            dispatch(isErrorUser(null))
+            dispatch(isErrorUser(null))
         }
         if (isErrorEmail) {
             setError("email", {type: "server", message: "is already taken"})
-            // dispatch(isErrorAddress(null))
+            dispatch(isErrorAddress(null))
+            dispatch(isErrorUser(null))
+        }
+        if (error === false) {
+            dispatch(isErrorUser(null))
+            dispatch(isErrorAddress(null))
+            dispatch(isErrorNewUser(null))
+            navigate('/');
         }
     }, [isErrorEmail, isErrorName, error])
 
@@ -54,17 +61,6 @@ const EditProfile = () => {
         localStorage.setItem('image', JSON.stringify(data.image))
         if (error === true) {
             openWarning('warning');
-        }
-        if (isErrorName) {
-            setError("username", {type: "server", message: "is already taken"})
-            dispatch(isErrorNewUser(null))
-        }
-        if (isErrorEmail) {
-            setError("email", {type: "server", message: "is already taken"})
-            dispatch(isErrorAddress(null))
-        }
-        if (!error) {
-            navigate('/');
         }
     }
 

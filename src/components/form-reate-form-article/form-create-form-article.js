@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useCallback, useEffect} from "react";
 import styles from '../../styles/edit-create.module.scss';
 import {Button, Input} from "antd";
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import TextArea from "antd/es/input/TextArea";
+import {getArticle} from "../../redux/actions/single-article";
+import {useDispatch} from "react-redux";
+import {useParams} from "react-router-dom";
 
 const FormCreateFormArticle = ({title, description, body, onHandleSubmit, nameList, value}) => {
     const {
@@ -14,6 +17,7 @@ const FormCreateFormArticle = ({title, description, body, onHandleSubmit, nameLi
     } = useForm({
         defaultValues: value
     })
+
 
     const {fields, append, remove} = useFieldArray({control, name: 'tag'}); // оставляем
 

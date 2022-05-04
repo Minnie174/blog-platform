@@ -17,11 +17,12 @@ export const editUser = (data) => async (dispatch) => {
     try {
         const response = await api.editProfile(data);
         if (response.username) {
-            console.log('username')
             dispatch(isErrorNewUser(true))
+            dispatch(isErrorUser(true))
         }
         if (response.email) {
             dispatch(isErrorAddress(true))
+            dispatch(isErrorUser(true))
         }
         const {user} = response
         const {image} = user;

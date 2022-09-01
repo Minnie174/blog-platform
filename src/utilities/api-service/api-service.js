@@ -2,7 +2,8 @@ import {getLoading} from "../../redux/actions/articles";
 
 export default class ApiService {
 
-    apiBase = 'https://kata.academy:8021/api/';
+    apiBase = 'https://blog.kata.academy/api/'
+
 
     user = JSON.parse(localStorage.getItem('user'))
 
